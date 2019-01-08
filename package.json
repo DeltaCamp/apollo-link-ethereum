@@ -1,20 +1,30 @@
 {
   "name": "apollo-link-web3",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/bundle.js",
+  "modules": "lib/index.js",
   "license": "MIT",
   "dependencies": {
-    "apollo-client": "^2.4.8",
-    "debug": "^4.1.1"
+    "apollo-link": "^1.2.6",
+    "apollo-utilities": "^1.0.27",
+    "debug": "^4.1.1",
+    "graphql-anywhere": "^4.1.24"
   },
   "devDependencies": {
     "@types/jest": "^23.3.11",
+    "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
     "jest": "^23.6.0",
+    "rollup": "^1.0.1",
     "ts-jest": "^23.10.5",
+    "tslib": "^1.9.3",
     "typescript": "^3.2.2"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --config=jest.config.js",
+    "test-watch": "npm run test -- --watch",
+    "build": "tsc -p .",
+    "bundle": "rollup -c",
+    "watch": "tsc -w -p . & rollup -cw"
   }
 }

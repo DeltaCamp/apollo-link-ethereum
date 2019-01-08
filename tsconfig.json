@@ -9,7 +9,7 @@
     "declaration": true,
     "noImplicitAny": false,
     "noUnusedParameters": false,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "skipLibCheck": true,
     "rootDir": "./src",
     "outDir": "lib"
