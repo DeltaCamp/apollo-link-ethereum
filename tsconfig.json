@@ -11,8 +11,6 @@
     "noUnusedParameters": false,
     "noUnusedLocals": false,
     "skipLibCheck": true,
-    "rootDir": "./src",
-    "outDir": "lib"
-  },
-  "include": ["src/**/*.ts"]
+    "esModuleInterop": true
+  }
 }

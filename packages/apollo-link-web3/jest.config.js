@@ -10,7 +10,12 @@ module.exports = {
     "json"
   ],
   "testPathIgnorePatterns": [
-    "/node_modules/"
+    "node_modules/",
+    "lib/.*"
+  ],
+  "unmockedModulePathPatterns": [
+    "lib/.*",
+    "dist/.*"
   ],
   "testURL": "http://localhost"
 }

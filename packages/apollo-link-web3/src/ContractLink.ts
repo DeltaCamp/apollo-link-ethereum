@@ -1,5 +1,4 @@
 import { Operation, NextLink, Observable, FetchResult, ApolloLink } from 'apollo-link'
-import debugFactory from 'debug'
 import {
   hasDirectives,
   // getMainDefinition
@@ -10,8 +9,6 @@ import { graphql } from './graphql-anywhere/graphql'
 import { resolvePromises, promiseEntry } from './resolvePromises'
 
 // Using some code borrowed from https://github.com/apollographql/apollo-link-state/blob/master/packages/apollo-link-state/src/index.ts
-
-const debug = debugFactory('contractLink.js')
 
 export class ContractLink extends ApolloLink {
   web3Resolver: Web3Resolver
