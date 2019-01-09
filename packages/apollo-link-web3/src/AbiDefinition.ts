@@ -1,13 +1,17 @@
-export enum BaseType {
-  uint256,
-  bytes32
-}
+export class AbiDefinition {
+  nameLookup: object
+  abi: Array<any>
 
-export enum AbiType {
-  Function,
-  Event
-}
+  constructor (abi: Array<any>) {
+    if (!abi) { throw new Error('abi is undefined') }
+    this.abi = abi
+    this.nameLookup = {}
+    this.abi.forEach(def => {
+      this.nameLookup[def.name] = def
+    })
+  }
 
-export interface AbiDefinition {
-  getType(name: string): AbiType
+  findByName (name: string): object {
+    return this.nameLookup[name]
+  }
 }

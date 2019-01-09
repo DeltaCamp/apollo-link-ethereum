@@ -57,7 +57,7 @@ export class ContractLink extends ApolloLink {
           contract = fieldName
           contractDirectives = info.directives.contract
         } else if (contract) {
-          var entry = promiseEntry(this.web3Resolver.resolve(contract, contractDirectives, fieldName, args, info))
+          var entry = promiseEntry(this.web3Resolver.resolve(contract, contractDirectives, fieldName, args, info.directives))
           promises.push(entry.promise)
           return entry
         }

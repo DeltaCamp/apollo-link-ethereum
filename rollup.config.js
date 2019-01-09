@@ -5,12 +5,12 @@ export const globals = {
   'apollo-utilities': 'apollo.utilities'
 }
 
-export default name => ({
+export default (name, extraGlobals) => ({
   input: 'lib/index.js',
   output: {
     file: 'dist/bundle.umd.js',
     format: 'umd',
-    globals,
+    globals: Object.assign({}, globals, extraGlobals || {}),
     sourcemap: true,
     exports: 'named',
     name

@@ -1,8 +1,9 @@
 {
   "name": "apollo-link-web3",
   "version": "1.0.0",
-  "main": "dist/bundle.js",
-  "modules": "lib/index.js",
+  "main": "./dist/bundle.umd.js",
+  "modules": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "apollo-link": "^1.2.6",
