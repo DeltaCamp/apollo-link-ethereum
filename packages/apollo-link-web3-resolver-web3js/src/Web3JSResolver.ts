@@ -5,10 +5,7 @@ export class Web3JSResolver implements Web3Resolver {
   abiMapping: AbiMapping
   contractCache: {}
 
-  constructor (web3: any, abiMapping: AbiMapping) {
-    if (!web3) {
-      throw new Error('web3 must be defined')
-    }
+  constructor (abiMapping: AbiMapping, web3?: any) {
     if (!abiMapping) {
       throw new Error('abiMapping must be defined')
     }
@@ -17,15 +14,25 @@ export class Web3JSResolver implements Web3Resolver {
     this.contractCache = {}
   }
 
-  resolve (contractName, contractDirectives, fieldName, args, info): Promise<any> {
+  resolve (contractName, contractDirectives, fieldName, args = {}, info): Promise<any> {
+    if (!this.web3) { return Promise.resolve() }
+    const values = Object.values(args || {})
+    console.log(`${fieldName} args: `, values)
     const contract = this._getContract(contractName, contractDirectives)
-    return contract.methods[fieldName](args)(info)
+    const methodFactory = contract.methods[fieldName]
+    if (typeof methodFactory !== 'function') {
+      console.error('wtf mate?', contract, methodFactory)
+      return Promise.resolve('nope')
+    } else {
+      const method = methodFactory()
+      return method.call()
+    }
   }
 
   _getContract (contractName, contractDirectives) {
     const { address } = contractDirectives
     if (!address) {
-      throw new Error(`Address not configured for contract ${contractName}`)
+      throw new Error(`Address not present in query against abi ${contractName}`)
     }
     let contract = this.contractCache[address]
     if (!contract) {

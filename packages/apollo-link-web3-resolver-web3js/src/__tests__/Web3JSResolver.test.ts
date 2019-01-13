@@ -19,13 +19,11 @@ describe('Web3JSResolver', () => {
 
   describe('constructor()', () => {
     it('should require args', () => {
-      expect(() => new Web3JSResolver(null, null)).toThrow()
-      expect(() => new Web3JSResolver('test', null)).toThrow()
-      expect(() => new Web3JSResolver(null, new AbiMapping())).toThrow()
+      expect(() => new Web3JSResolver(null)).toThrow()
     })
 
     it('should set the abiMapping and web3', () => {
-      const resolver = new Web3JSResolver(web3, abiMapping)
+      const resolver = new Web3JSResolver(abiMapping, web3)
       expect(resolver.web3).toEqual(web3)
       expect(resolver.abiMapping).toEqual(abiMapping)
     })
@@ -35,7 +33,7 @@ describe('Web3JSResolver', () => {
     let resolver
 
     beforeEach(() => {
-      resolver = new Web3JSResolver(web3, abiMapping)
+      resolver = new Web3JSResolver(abiMapping, web3)
     })
 
     it('should find the web3 method and call it', () => {

@@ -30,10 +30,11 @@ export function resolvePromises(object) {
     if (value.promise && value.promise instanceof Promise) {
       if (value.result) {
         object[key] = value.result
+        delete value['error']
       } else if (value.error) {
-        delete value['promise']
         delete value['result']
       }
+      delete value['promise']
     } else if (Array.isArray(value) || typeof value === 'object') {
       resolvePromises(object[key])
     }

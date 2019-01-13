@@ -1,7 +1,7 @@
 {
   "name": "apollo-link-web3-resolver-web3js",
   "version": "1.0.0",
-  "main": "dist/bundle.js",
+  "main": "dist/bundle.umd.js",
   "modules": "lib/index.js",
   "license": "MIT",
   "dependencies": {},
