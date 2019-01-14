@@ -18,8 +18,8 @@ Setup a new Apollo Client:
 ```javascript
 import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ContractLink } from 'apollo-link-web3'
-import { Web3JSResolver } from 'apollo-link-web3-resolver-web3js'
+import { ContractLink } from 'apollo-link-ethereum'
+import { Web3JSResolver } from 'apollo-link-ethereum-resolver-web3js'
 import { abiMapping } from './abiMapping'
 import Web3 from 'web3'
 
