@@ -43,8 +43,8 @@ Now you can use Ethereum contracts as a data source!  Here is an example using R
 
 ```jsx
 const NETWORK_STATUS = gql`
-  query Stuff($address: String!) {
-    Token @contract(address: $address) {
+  query GetTokenInfo($tokenAddress: String!) {
+    ERC20Token @contract(address: $tokenAddress) {
       totalSupply
       myBalance: balanceOf(address: "0xff536c5497c7b244c25ca6b31a5af1545d0c6184")
       allEvents @pastEvents(fromBlock: "0", toBlock: "latest")
@@ -71,11 +71,11 @@ export class App extends Component {
                   Edit <code>src/App.js</code> and save to reload.
                 </p>
                 <p>
-                  <i>{(get(data, 'Token.myBalance') || '').toString()}</i>
+                  <i>{(get(data, 'ERC20Token.myBalance') || '').toString()}</i>
                   <br />
-                  <i>{(get(data, 'Token.totalSupply') || '').toString()}</i>
+                  <i>{(get(data, 'ERC20Token.totalSupply') || '').toString()}</i>
                   <br />
-                  <i>{(get(data, 'Token.allEvents') || []).length}</i>
+                  <i>{(get(data, 'ERC20Token.allEvents') || []).length}</i>
                 </p>
                 <a
                   className="App-link"
@@ -102,8 +102,8 @@ This custom directive sets up a contract context.  The name is used to look up t
 
 ```javascript
 const NETWORK_STATUS = gql`
-  query Stuff($address: String!) {
-    Token @contract(address: $address) {
+  query Stuff($tokenAddress: String!) {
+    ERC20Token @contract(address: $tokenAddress) {
     }
   }
 }
