@@ -1,3 +1,3 @@
 export interface Web3Resolver {
-  resolve (contractName, contractDirectives, fieldName, args, info): Promise<any>
+  resolve (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Promise<any>
 }

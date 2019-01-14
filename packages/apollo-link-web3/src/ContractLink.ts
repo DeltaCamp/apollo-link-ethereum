@@ -8,7 +8,7 @@ import { removeContractSetsFromDocument } from './removeContractSetsFromDocument
 import { graphql } from './graphql-anywhere/graphql'
 import { resolvePromises, promiseEntry } from './resolvePromises'
 
-// Using some code borrowed from https://github.com/apollographql/apollo-link-state/blob/master/packages/apollo-link-state/src/index.ts
+// Using some code taken from https://github.com/apollographql/apollo-link-state/blob/master/packages/apollo-link-state/src/index.ts
 
 export class ContractLink extends ApolloLink {
   web3Resolver: Web3Resolver
@@ -22,17 +22,14 @@ export class ContractLink extends ApolloLink {
     operation: Operation,
     forward: NextLink,
   ): Observable<FetchResult> {
+    const { query } = operation
 
-    const isContract = hasDirectives(['contract'], operation.query)
+    const isContract = hasDirectives(['contract'], query)
     if (!isContract) {
       return forward ? forward(operation) : null
     }
 
-    // debug('operation: ', operation)
-    // debug('mainDefinition: ', getMainDefinition(operation.query))
-
-    const server = removeContractSetsFromDocument(operation.query)
-    const { query } = operation
+    const server = removeContractSetsFromDocument(query)
 
     const resolverFactory = (promises) => {
       let contract: string = null

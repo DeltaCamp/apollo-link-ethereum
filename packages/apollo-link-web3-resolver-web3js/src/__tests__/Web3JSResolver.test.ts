@@ -4,12 +4,16 @@ import abi from './abi'
 
 describe('Web3JSResolver', () => {
   const methodNameSend = jest.fn()
+  const getPastEvents = jest.fn()
   const web3 = {
     eth: {
       Contract: jest.fn().mockImplementation(() => ({
         methods: {
-          methodName: jest.fn(() => methodNameSend)
-        }
+          methodName: jest.fn(() => ({
+            call: methodNameSend
+          }))
+        },
+        getPastEvents
       }))
     }
   }
@@ -29,17 +33,26 @@ describe('Web3JSResolver', () => {
     })
   })
 
-  describe('resolve', () => {
+  describe('directives', () => {
     let resolver
 
     beforeEach(() => {
       resolver = new Web3JSResolver(abiMapping, web3)
     })
 
-    it('should find the web3 method and call it', () => {
-      resolver.resolve('TheContract', { address: '0x1234' }, 'methodName', { foo: 'bar' }, { options: { gas: 1000 } })
-      expect(methodNameSend).toHaveBeenCalledTimes(1)
-      expect(methodNameSend).toHaveBeenCalledWith({ options: { gas: 1000 } })
+    describe('@call', () => {
+      it('should find the web3 method and call it', () => {
+        resolver.resolve('TheContract', { address: '0x1234' }, 'methodName', { foo: 'bar' }, { call: { gas: 1000 } })
+        expect(methodNameSend).toHaveBeenCalledTimes(1)
+        expect(methodNameSend).toHaveBeenCalledWith({ gas: 1000 })
+      })
+    })
+
+    describe('@pastEvents', () => {
+      it('should get all past events for the contract', () => {
+        resolver.resolve('TheContract', { address: '0x1234' }, 'EventName', { foo: 'bar' }, { pastEvents: { fromBlock: 0 } })
+        expect(getPastEvents).toHaveBeenCalledWith('EventName', { fromBlock: 0 })
+      })
     })
   })
 })

@@ -14,19 +14,40 @@ export class Web3JSResolver implements Web3Resolver {
     this.contractCache = {}
   }
 
-  resolve (contractName, contractDirectives, fieldName, args = {}, info): Promise<any> {
-    if (!this.web3) { return Promise.resolve() }
-    const values = Object.values(args || {})
-    console.log(`${fieldName} args: `, values)
-    const contract = this._getContract(contractName, contractDirectives)
+  resolve (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Promise<any> {
+    try {
+      fieldDirectives = fieldDirectives || {}
+      fieldArgs = fieldArgs || {}
+      if (!this.web3) { return Promise.resolve() }
+      const contract = this._getContract(contractName, contractDirectives)
+      let result = null
+      if (fieldDirectives.hasOwnProperty('pastEvents')) {
+        result = this._pastEvents(contract, fieldName, fieldArgs, fieldDirectives)
+      } else {
+        result = this._call(contract, fieldName, fieldArgs, fieldDirectives)
+      }
+      return result
+    } catch (error) {
+      console.error(error)
+      return Promise.reject(error.toString())
+    }
+  }
+
+  _call (contract, fieldName, fieldArgs, fieldDirectives): Promise<any> {
+    const values = Object.keys(fieldArgs || {}).map(key => fieldArgs[key]);
     const methodFactory = contract.methods[fieldName]
     if (typeof methodFactory !== 'function') {
-      console.error('wtf mate?', contract, methodFactory)
-      return Promise.resolve('nope')
+      return Promise.reject(`Unknown function ${fieldName}`)
     } else {
-      const method = methodFactory()
-      return method.call()
+      const method = methodFactory(...values)
+      const options = fieldDirectives ? fieldDirectives.call : {}
+      console.log('????', fieldDirectives)
+      return method.call(options)
     }
+  }
+
+  _pastEvents (contract, fieldName, fieldArgs, fieldDirectives): Promise<any> {
+    return contract.getPastEvents(fieldName, fieldDirectives ? fieldDirectives.pastEvents : {})
   }
 
   _getContract (contractName, contractDirectives) {
