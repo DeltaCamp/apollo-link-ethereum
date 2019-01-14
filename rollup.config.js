@@ -3,7 +3,7 @@ import sourcemaps from 'rollup-plugin-sourcemaps'
 export const globals = {
   'apollo-link': 'apolloLink.core',
   'apollo-utilities': 'apollo.utilities',
-  'apollo-link-web3': 'apolloLinkWeb3'
+  'apollo-link-ethereum': 'apolloLinkWeb3'
 }
 
 export default (name, extraGlobals) => ({

@@ -1,4 +1,4 @@
 export * from './ContractLink'
-export * from './Web3Resolver'
+export * from './EthereumResolver'
 export * from './AbiMapping'
 export * from './AbiDefinition'

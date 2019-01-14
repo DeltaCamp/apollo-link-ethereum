@@ -1,5 +1,5 @@
 import { Web3JSResolver } from '../Web3JSResolver'
-import { AbiMapping, AbiDefinition } from 'apollo-link-web3'
+import { AbiMapping, AbiDefinition } from 'apollo-link-ethereum'
 import abi from './abi'
 
 describe('Web3JSResolver', () => {

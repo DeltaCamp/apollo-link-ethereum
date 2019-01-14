@@ -1,6 +1,6 @@
-import { AbiMapping, Web3Resolver } from 'apollo-link-web3'
+import { AbiMapping, EthereumResolver } from 'apollo-link-ethereum'
 
-export class Web3JSResolver implements Web3Resolver {
+export class Web3JSResolver implements EthereumResolver {
   web3: any
   abiMapping: AbiMapping
   contractCache: {}

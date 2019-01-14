@@ -1,3 +1,3 @@
-export interface Web3Resolver {
+export interface EthereumResolver {
   resolve (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Promise<any>
 }

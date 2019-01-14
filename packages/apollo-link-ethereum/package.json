@@ -1,5 +1,5 @@
 {
-  "name": "apollo-link-web3",
+  "name": "apollo-link-ethereum",
   "version": "1.0.0",
   "main": "./dist/bundle.umd.js",
   "modules": "./lib/index.js",

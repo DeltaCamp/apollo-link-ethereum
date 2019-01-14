@@ -1,7 +1,7 @@
 import { execute } from 'apollo-link'
 import gql from 'graphql-tag'
 import { ContractLink } from '../ContractLink'
-import { Web3Resolver } from '../Web3Resolver'
+import { EthereumResolver } from '../EthereumResolver'
 
 describe('ContractLink', () => {
   it('should resolve the promises correctly', done => {
@@ -16,11 +16,11 @@ describe('ContractLink', () => {
 
     const resolveData = 'resolveMockPromise'
     const mockResolve = jest.fn(() => Promise.resolve(resolveData))
-    const web3Resolver:Web3Resolver = {
+    const EthereumResolver:EthereumResolver = {
       resolve: mockResolve
     }
     const next = jest.fn()
-    const contractLink = new ContractLink(web3Resolver)
+    const contractLink = new ContractLink(EthereumResolver)
     const observable = execute(contractLink, {
       query: sampleQuery,
     })
@@ -60,11 +60,11 @@ describe('ContractLink', () => {
 
     const resolveErrorMsg = 'resolveError'
     const mockResolve = jest.fn(() => Promise.reject(resolveErrorMsg))
-    const web3Resolver:Web3Resolver = {
+    const EthereumResolver:EthereumResolver = {
       resolve: mockResolve
     }
     const next = jest.fn()
-    const contractLink = new ContractLink(web3Resolver)
+    const contractLink = new ContractLink(EthereumResolver)
     const observable = execute(contractLink, {
       query: sampleQuery,
     })

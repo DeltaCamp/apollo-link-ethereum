@@ -3,7 +3,7 @@ import {
   hasDirectives,
   // getMainDefinition
 } from 'apollo-utilities'
-import { Web3Resolver } from './Web3Resolver'
+import { EthereumResolver } from './EthereumResolver'
 import { removeContractSetsFromDocument } from './removeContractSetsFromDocument'
 import { graphql } from './graphql-anywhere/graphql'
 import { resolvePromises, promiseEntry } from './resolvePromises'
@@ -11,11 +11,11 @@ import { resolvePromises, promiseEntry } from './resolvePromises'
 // Using some code taken from https://github.com/apollographql/apollo-link-state/blob/master/packages/apollo-link-state/src/index.ts
 
 export class ContractLink extends ApolloLink {
-  web3Resolver: Web3Resolver
+  EthereumResolver: EthereumResolver
 
-  constructor (web3Resolver?: Web3Resolver) {
+  constructor (EthereumResolver?: EthereumResolver) {
     super()
-    this.web3Resolver = web3Resolver
+    this.EthereumResolver = EthereumResolver
   }
 
   public request(
@@ -54,7 +54,7 @@ export class ContractLink extends ApolloLink {
           contract = fieldName
           contractDirectives = info.directives.contract
         } else if (contract) {
-          var entry = promiseEntry(this.web3Resolver.resolve(contract, contractDirectives, fieldName, args, info.directives))
+          var entry = promiseEntry(this.EthereumResolver.resolve(contract, contractDirectives, fieldName, args, info.directives))
           promises.push(entry.promise)
           return entry
         }
