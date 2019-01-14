@@ -109,7 +109,7 @@ const NETWORK_STATUS = gql`
 }
 ```
 
-The above example will lookup the ABI using the name 'Token', and set the contract address to be the parameter `$address`.
+The above example will lookup the ABI using the name 'ERC20Token', and set the contract address to be the parameter `$address`.
 
 ## `@call` Directive
 
