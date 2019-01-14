@@ -1,10 +1,9 @@
 {
   "name": "apollo-link-ethereum-resolver-web3js",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "main": "dist/bundle.umd.js",
   "modules": "lib/index.js",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^23.3.11",
     "jest": "^23.6.0",

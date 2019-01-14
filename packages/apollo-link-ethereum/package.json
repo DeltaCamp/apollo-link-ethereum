@@ -1,6 +1,6 @@
 {
   "name": "apollo-link-ethereum",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "main": "./dist/bundle.umd.js",
   "modules": "./lib/index.js",
   "typings": "./lib/index.d.ts",
@@ -18,10 +18,10 @@
     "jest": "^23.6.0",
     "lerna": "^3.9.0",
     "rollup": "^1.0.1",
+    "rollup-plugin-sourcemaps": "^0.4.2",
     "ts-jest": "^23.10.5",
     "tslib": "^1.9.3",
-    "typescript": "^3.2.2",
-    "rollup-plugin-sourcemaps": "^0.4.2"
+    "typescript": "^3.2.2"
   },
   "scripts": {
     "test": "jest --config=jest.config.js",
