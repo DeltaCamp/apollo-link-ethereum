@@ -44,7 +44,7 @@ window.ethereum.enable().then(function () {
 Now you can use Ethereum contracts as a data source!  Here is an example using React:
 
 ```jsx
-const NETWORK_STATUS = gql`
+const GET_TOKEN_INFO = gql`
   query GetTokenInfo($tokenAddress: String!) {
     ERC20Token @contract(address: $tokenAddress) {
       totalSupply
@@ -58,7 +58,7 @@ export class App extends Component {
 
     return (
       <Query
-        query={NETWORK_STATUS}
+        query={GET_TOKEN_INFO}
         variables={ { address: "0xa95e94ac1d1e5c57413a281f0197140fbb6d4ccf" } }>
 
         {({ data }) => {
@@ -103,8 +103,8 @@ export class App extends Component {
 This custom directive sets up a contract context.  The name is used to look up the ABI, and you can set the contract address using the `address` parameter.  For example:
 
 ```javascript
-const NETWORK_STATUS = gql`
-  query Stuff($tokenAddress: String!) {
+const GET_TOKEN_INFO = gql`
+  query GetTokenInfo($tokenAddress: String!) {
     ERC20Token @contract(address: $tokenAddress) {
     }
   }
