@@ -9,6 +9,8 @@ The package integrates with [Apollo Client](https://www.apollographql.com) as a 
 | [apollo-link-ethereum](./packages/apollo-link-ethereum/README.md) | The main package |
 | [apollo-link-ethereum-resolver-web3js](./packages/apollo-link-ethereum-resolver-web3js) | A package that provides a Web3js 1.0 binding |
 
+Check out the example app [apollo-link-ethereum-example](https://github.com/DeltaCamp/apollo-link-ethereum-example)
+
 ## Usage
 
 Setup a new Apollo Client:
