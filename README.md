@@ -52,6 +52,7 @@ const GET_TOKEN_INFO = gql`
       allEvents @pastEvents(fromBlock: "0", toBlock: "latest")
     }
   }
+`
 
 export class App extends Component {
   render() {
@@ -109,6 +110,7 @@ const GET_TOKEN_INFO = gql`
     }
   }
 }
+`
 ```
 
 The above example will lookup the ABI using the name 'ERC20Token', and set the contract address to be the parameter `$tokenAddress`.
