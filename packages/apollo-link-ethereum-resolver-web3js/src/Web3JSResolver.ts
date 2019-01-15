@@ -22,7 +22,6 @@ export class Web3JSResolver implements EthereumResolver {
       const contract = await this._getContract(contractName, contractDirectives)
       let result = null
       if (fieldDirectives.hasOwnProperty('pastEvents')) {
-        console.log('calling ', contract.id)
         result = this._pastEvents(contract, fieldName, fieldArgs, fieldDirectives)
       } else {
         result = this._call(contract, fieldName, fieldArgs, fieldDirectives)
