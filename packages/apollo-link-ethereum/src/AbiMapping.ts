@@ -23,11 +23,17 @@ export class AbiMapping {
     return this.abiMapping[name]
   }
 
-  addAddress(name: string, address: string) {
-    this.addressMapping[name] = address
+  addAddress(name: string, networkId: Number, address: string) {
+    if (!this.addressMapping[name]) {
+      this.addressMapping[name] = {}
+    }
+    this.addressMapping[name][networkId] = address
   }
 
-  getAddress(name: string) {
-    return this.addressMapping[name]
+  getAddress(name: string, networkId: Number) {
+    if (!this.addressMapping[name]) {
+      return null
+    }
+    return this.addressMapping[name][networkId]
   }
 }

@@ -14,14 +14,15 @@ export class Web3JSResolver implements EthereumResolver {
     this.contractCache = {}
   }
 
-  resolve (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Promise<any> {
+  async resolve (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Promise<any> {
     try {
       fieldDirectives = fieldDirectives || {}
       fieldArgs = fieldArgs || {}
       if (!this.web3) { return Promise.resolve() }
-      const contract = this._getContract(contractName, contractDirectives)
+      const contract = await this._getContract(contractName, contractDirectives)
       let result = null
       if (fieldDirectives.hasOwnProperty('pastEvents')) {
+        console.log('calling ', contract.id)
         result = this._pastEvents(contract, fieldName, fieldArgs, fieldDirectives)
       } else {
         result = this._call(contract, fieldName, fieldArgs, fieldDirectives)
@@ -40,7 +41,6 @@ export class Web3JSResolver implements EthereumResolver {
     } else {
       const method = methodFactory(...values)
       const options = fieldDirectives ? fieldDirectives.call : {}
-      console.log('????', fieldDirectives)
       return method.call(options)
     }
   }
@@ -49,22 +49,27 @@ export class Web3JSResolver implements EthereumResolver {
     return contract.getPastEvents(fieldName, fieldDirectives ? fieldDirectives.pastEvents : {})
   }
 
-  _getContract (contractName, contractDirectives) {
+  async _getContract (contractName, contractDirectives) {
+    const networkId = await this.web3.eth.net.getId()
+    if (!this.contractCache[networkId]) {
+      this.contractCache[networkId] = {}
+    }
+
     let address = contractDirectives.address
     if (!address) {
-      address = this.abiMapping.getAddress(contractName)
+      address = this.abiMapping.getAddress(contractName, networkId)
     }
     if (!address) {
       throw new Error(`Address not present in query against abi ${contractName}`)
     }
-    let contract = this.contractCache[address]
+    let contract = this.contractCache[networkId][address]
     if (!contract) {
       const abi = this.abiMapping.getAbi(contractName)
       if (!abi) {
         throw new Error(`Could not find abi for name ${contractName}`)
       }
       contract = new this.web3.eth.Contract(abi, address)
-      this.contractCache[address] = contract
+      this.contractCache[networkId][address] = contract
     }
     return contract
   }

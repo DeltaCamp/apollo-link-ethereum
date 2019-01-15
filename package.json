@@ -4,5 +4,9 @@
   "dependencies": {},
   "devDependencies": {
     "lerna": "^3.9.0"
+  },
+  "scripts": {
+    "test": "lerna run test",
+    "dist": "cd packages/apollo-link-ethereum && yarn dist; cd ../apollo-link-ethereum-resolver-web3js && yarn dist"
   }
 }

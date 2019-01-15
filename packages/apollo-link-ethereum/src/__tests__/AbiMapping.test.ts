@@ -37,9 +37,10 @@ describe('AbiMapping', () => {
     const mapping = new AbiMapping()
 
     it('should work', () => {
-      mapping.addAddress('Vouching', '1234')
+      mapping.addAddress('Vouching', 1234, '0xabcde')
 
-      expect(mapping.getAddress('Vouching')).toEqual('1234')
+      expect(mapping.getAddress('Vouching', 1234)).toEqual('0xabcde')
+      expect(mapping.getAddress('Vouching', 1)).toEqual(undefined)
     })
   })
 })

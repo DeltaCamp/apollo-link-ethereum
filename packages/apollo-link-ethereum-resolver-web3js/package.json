@@ -16,7 +16,7 @@
   },
   "scripts": {
     "test": "jest --config=jest.config.js",
-    "test-watch": "npm run test -- --watch",
+    "test-watch": "yarn run test -- --watch",
     "build": "tsc -p .",
     "bundle": "rollup -c",
     "dist": "yarn build && yarn bundle",
