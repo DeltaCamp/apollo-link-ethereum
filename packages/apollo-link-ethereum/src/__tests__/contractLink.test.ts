@@ -8,7 +8,7 @@ describe('ContractLink', () => {
 
     const sampleQuery = gql`
       query SampleQuery {
-        CoordinationGame @contract(address: "0x1111") {
+        CoordinationGame @contract {
           game(blah: "test") @options(foo: "bar")
         }
       }
@@ -30,7 +30,7 @@ describe('ContractLink', () => {
       complete: () => {
 
         expect(mockResolve).toHaveBeenCalledWith(
-          'CoordinationGame', { address: '0x1111' }, 'game', { blah: "test" }, { options: { foo: "bar" } }
+          'CoordinationGame', null, 'game', { blah: "test" }, { options: { foo: "bar" } }
         )
 
         expect(next).toHaveBeenCalledTimes(1)
@@ -72,6 +72,9 @@ describe('ContractLink', () => {
       next,
       error: error => expect(false),
       complete: () => {
+        expect(mockResolve).toHaveBeenCalledWith(
+          'CoordinationGame', { address: '0x1111' }, 'game', { blah: "test" }, { options: { foo: "bar" } }
+        )
         expect(next).toHaveBeenCalledTimes(1)
         expect(next).toHaveBeenCalledWith({
           data: {

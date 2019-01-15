@@ -1,3 +1,3 @@
 export interface EthereumResolver {
-  resolve (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Promise<any>
+  async resolve (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Promise<any>
 }

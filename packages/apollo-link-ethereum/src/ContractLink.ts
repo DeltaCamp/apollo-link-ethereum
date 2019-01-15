@@ -11,11 +11,11 @@ import { resolvePromises, promiseEntry } from './resolvePromises'
 // Using some code taken from https://github.com/apollographql/apollo-link-state/blob/master/packages/apollo-link-state/src/index.ts
 
 export class ContractLink extends ApolloLink {
-  EthereumResolver: EthereumResolver
+  ethereumResolver: EthereumResolver
 
-  constructor (EthereumResolver?: EthereumResolver) {
+  constructor (ethereumResolver?: EthereumResolver) {
     super()
-    this.EthereumResolver = EthereumResolver
+    this.ethereumResolver = ethereumResolver
   }
 
   public request(
@@ -50,11 +50,11 @@ export class ContractLink extends ApolloLink {
         // otherwise, run the web3 resolver
         // debug(`resolver: `, fieldName, rootValue, args, context, info, contract)
 
-        if (info.directives && info.directives.contract) {
+        if (info.directives && info.directives.hasOwnProperty('contract')) {
           contract = fieldName
           contractDirectives = info.directives.contract
         } else if (contract) {
-          var entry = promiseEntry(this.EthereumResolver.resolve(contract, contractDirectives, fieldName, args, info.directives))
+          var entry = promiseEntry(this.ethereumResolver.resolve(contract, contractDirectives, fieldName, args, info.directives))
           promises.push(entry.promise)
           return entry
         }
