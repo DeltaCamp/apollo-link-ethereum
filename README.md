@@ -11,6 +11,28 @@ The package integrates with [Apollo Client](https://www.apollographql.com) as a 
 
 Check out the example app [apollo-link-ethereum-example](https://github.com/DeltaCamp/apollo-link-ethereum-example)
 
+## Install
+
+We use yarn and lerna. Run yarn to install the lerna dependency:
+
+`$ yarn`
+
+Then use lerna to set up the child packages:
+
+`$ lerna bootstrap`
+
+Create symlinks for the two child packages on your filesystem using yarn link:
+
+`$ cd packages/apollo-link-ethereum && yarn link && cd ../.. && cd packages/apollo-link-ethereum-resolver-web3js && yarn link`
+
+Now in your project you can run:
+
+`$ yarn link apollo-link-ethereum`
+
+`$ yarn link apollo-link-ethereum-resolver-web3js`
+
+The local versions on your filesystem will be available to your project.
+
 ## Usage
 
 Setup a new Apollo Client:
@@ -122,3 +144,11 @@ By default, fields without any directives will be treated as a `@call`.  A call 
 ## `@pastEvents` Directive
 
 This directive will retrieve all past events for the contract.  It will use the name of the field as the filter so you can target specific events.  If the name of the field is 'allEvents' then all of the events will be retrieved.
+
+## Development
+
+The yarn watch command runs both the typescript transpilation and rollup to build the JS into a distributable:
+
+`$ cd packages/apollo-link-ethereum && yarn watch`
+
+`$ cd packages/apollo-link-ethereum-resolver-web3js && yarn watch`
