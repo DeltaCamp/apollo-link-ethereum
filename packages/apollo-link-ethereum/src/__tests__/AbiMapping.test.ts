@@ -32,4 +32,14 @@ describe('AbiMapping', () => {
       expect(mapping.getAbi('hello')).toEqual(abiDef)
     })
   })
+
+  describe('addAddress()', () => {
+    const mapping = new AbiMapping()
+
+    it('should work', () => {
+      mapping.addAddress('Vouching', '1234')
+
+      expect(mapping.getAddress('Vouching')).toEqual('1234')
+    })
+  })
 })

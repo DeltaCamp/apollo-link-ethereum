@@ -28,7 +28,6 @@ export class Web3JSResolver implements EthereumResolver {
       }
       return result
     } catch (error) {
-      console.error(error)
       return Promise.reject(error.toString())
     }
   }
@@ -51,7 +50,10 @@ export class Web3JSResolver implements EthereumResolver {
   }
 
   _getContract (contractName, contractDirectives) {
-    const { address } = contractDirectives
+    let address = contractDirectives.address
+    if (!address) {
+      address = this.abiMapping.getAddress(contractName)
+    }
     if (!address) {
       throw new Error(`Address not present in query against abi ${contractName}`)
     }

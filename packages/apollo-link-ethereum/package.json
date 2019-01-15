@@ -28,6 +28,7 @@
     "test-watch": "npm run test -- --watch",
     "build": "tsc -p .",
     "bundle": "rollup -c",
+    "dist": "yarn build && yarn bundle",
     "watch": "tsc -w -p . & rollup -cw"
   }
 }

@@ -1,10 +1,12 @@
 import { AbiDefinition } from './AbiDefinition'
 
 export class AbiMapping {
-  mapping: object
+  abiMapping: object
+  addressMapping: object
 
   constructor () {
-    this.mapping = {}
+    this.abiMapping = {}
+    this.addressMapping = {}
   }
 
   addAbi(name: string, abiDefinition: AbiDefinition): void {
@@ -14,10 +16,18 @@ export class AbiMapping {
     if (!abiDefinition) {
       throw new Error(`ABI cannot be null`)
     }
-    this.mapping[name] = abiDefinition
+    this.abiMapping[name] = abiDefinition
   }
 
   getAbi(name: string): AbiDefinition {
-    return this.mapping[name]
+    return this.abiMapping[name]
+  }
+
+  addAddress(name: string, address: string) {
+    this.addressMapping[name] = address
+  }
+
+  getAddress(name: string) {
+    return this.addressMapping[name]
   }
 }

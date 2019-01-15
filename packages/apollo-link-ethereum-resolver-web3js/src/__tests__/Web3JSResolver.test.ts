@@ -46,6 +46,27 @@ describe('Web3JSResolver', () => {
         expect(methodNameSend).toHaveBeenCalledTimes(1)
         expect(methodNameSend).toHaveBeenCalledWith({ gas: 1000 })
       })
+
+      it('should error when no address is present', () => {
+        return new Promise((resolve, reject) => {
+          resolver.resolve('TheContract2', {}, 'methodName', { foo: 'bar' }, { call: { gas: 1000 } })
+            .then(() => {
+              reject('An error should have been thrown')
+            })
+            .catch(() => {
+              resolve('ok!')
+            })
+        })
+      })
+
+      describe('when the abi has an address mapping', () => {
+        it('should use the abi address', () => {
+          abiMapping.addAddress('TheContract2', '0x1234')
+          resolver.resolve('TheContract2', {}, 'methodName', { foo: 'bar' }, { call: { gas: 1000 } })
+          expect(methodNameSend).toHaveBeenCalledTimes(1)
+          expect(methodNameSend).toHaveBeenCalledWith({ gas: 1000 })
+        })
+      })
     })
 
     describe('@pastEvents', () => {
