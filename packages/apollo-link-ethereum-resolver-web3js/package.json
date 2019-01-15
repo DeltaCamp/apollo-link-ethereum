@@ -1,6 +1,6 @@
 {
   "name": "apollo-link-ethereum-resolver-web3js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "dist/bundle.umd.js",
   "modules": "lib/index.js",
   "license": "MIT",
@@ -23,7 +23,7 @@
     "watch": "tsc -w -p . & rollup -cw"
   },
   "peerDependencies": {
-    "web3": "^1.0.0-beta.37",
-    "apollo-link-ethereum": "^0.0.2"
+    "apollo-link-ethereum": "^0.0.2",
+    "web3": "^1.0.0-beta.37"
   }
 }
