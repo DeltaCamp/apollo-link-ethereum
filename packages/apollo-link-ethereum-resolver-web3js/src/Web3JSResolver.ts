@@ -54,7 +54,7 @@ export class Web3JSResolver implements EthereumResolver {
       this.contractCache[networkId] = {}
     }
 
-    let address = contractDirectives.address
+    let address = contractDirectives ? contractDirectives.address : null
     if (!address) {
       address = this.abiMapping.getAddress(contractName, networkId)
     }

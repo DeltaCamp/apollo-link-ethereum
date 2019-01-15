@@ -72,7 +72,7 @@ describe('Web3JSResolver', () => {
       describe('when the abi has an address mapping', () => {
         it('should use the abi address', async () => {
           abiMapping.addAddress('TheContract', 1234, '0x1234')
-          await resolver.resolve('TheContract', {}, 'methodName', { foo: 'bar' }, { call: { gas: 1000 } })
+          await resolver.resolve('TheContract', null, 'methodName', { foo: 'bar' }, { call: { gas: 1000 } })
           expect(methodNameSend).toHaveBeenCalledTimes(1)
           expect(methodNameSend).toHaveBeenCalledWith({ gas: 1000 })
         })
