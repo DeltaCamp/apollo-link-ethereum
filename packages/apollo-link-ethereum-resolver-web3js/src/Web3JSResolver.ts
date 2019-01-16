@@ -28,6 +28,7 @@ export class Web3JSResolver implements EthereumResolver {
       }
       return result
     } catch (error) {
+      console.error(error)
       return Promise.reject(error.toString())
     }
   }
