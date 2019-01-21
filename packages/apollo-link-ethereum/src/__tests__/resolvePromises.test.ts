@@ -12,19 +12,21 @@ describe('resolvePromises', () => {
       test: [1, 2, 3],
       error: {
         error: 'This did not work',
-        promise: Promise.resolve()
+        promise: Promise.reject()
       }
     }
 
-    resolvePromises(input)
+    var errors = resolvePromises(input)
+
+    expect(errors).toEqual([
+      'This did not work'
+    ])
 
     expect(input).toEqual({
       success: 'hello',
       foo: 'bar',
       test: [1, 2, 3],
-      error: {
-        error: 'This did not work'
-      }
+      error: undefined
     })
   })
 })

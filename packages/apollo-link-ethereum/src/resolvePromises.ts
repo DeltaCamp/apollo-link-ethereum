@@ -21,7 +21,7 @@ export function promiseEntry(promise) {
   return entry
 }
 
-export function resolvePromises(object) {
+export function resolvePromises(object, accumulator = []) {
   for (var key in object) {
     if (!object.hasOwnProperty(key)) {
       continue
@@ -29,13 +29,12 @@ export function resolvePromises(object) {
     var value = object[key]
     if (value.promise && value.promise instanceof Promise) {
       if (value.error) {
-        delete value['result']
-        delete value['promise']
-      } else {
-        object[key] = value.result
+        accumulator.push(value.error)
       }
+      object[key] = value.result
     } else if (Array.isArray(value) || typeof value === 'object') {
-      resolvePromises(object[key])
+      resolvePromises(object[key], accumulator)
     }
   }
+  return accumulator
 }

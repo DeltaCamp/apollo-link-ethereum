@@ -40,7 +40,7 @@ describe('ContractLink', () => {
               game: resolveData,
             }
           },
-          errors: undefined
+          errors: []
         })
 
         done()
@@ -64,13 +64,14 @@ describe('ContractLink', () => {
       resolve: mockResolve
     }
     const next = jest.fn()
+    const errorHandler = jest.fn()
     const contractLink = new ContractLink(EthereumResolver)
     const observable = execute(contractLink, {
       query: sampleQuery,
     })
     observable.subscribe({
       next,
-      error: error => expect(false),
+      error: errorHandler,
       complete: () => {
         expect(mockResolve).toHaveBeenCalledWith(
           'CoordinationGame', { address: '0x1111' }, 'game', { blah: "test" }, { options: { foo: "bar" } }
@@ -79,10 +80,10 @@ describe('ContractLink', () => {
         expect(next).toHaveBeenCalledWith({
           data: {
             CoordinationGame: {
-              game: { error: resolveErrorMsg },
+              game: null,
             }
           },
-          errors: undefined
+          errors: [  'resolveError'  ]
         })
         done()
       },

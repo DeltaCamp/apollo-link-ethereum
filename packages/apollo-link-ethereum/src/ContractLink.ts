@@ -109,7 +109,7 @@ export class ContractLink extends ApolloLink {
           })
 
           function promiseFinally() {
-            resolvePromises(nextData)
+            var errors = resolvePromises(nextData)
 
             observer.next({
               data: nextData,
@@ -119,6 +119,7 @@ export class ContractLink extends ApolloLink {
             if (complete) {
               observer.complete();
             }
+
             handlingNext = false;
           }
 
