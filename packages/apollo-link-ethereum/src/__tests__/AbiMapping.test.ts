@@ -41,6 +41,25 @@ describe('AbiMapping', () => {
 
       expect(mapping.getAddress('Vouching', 1234)).toEqual('0xabcde')
       expect(mapping.getAddress('Vouching', 1)).toEqual(undefined)
+
+      expect(mapping.getName('0xabcde', 1234)).toEqual('Vouching')
+      expect(mapping.getName('0xabcde', 1)).toEqual(undefined)
+    })
+  })
+
+  describe('getAddress()', () => {
+    const mapping = new AbiMapping()
+
+    it('should do nothing when the address does not exist', () => {
+      expect(mapping.getAddress('Vouching', 1234)).toEqual(undefined)
+    })
+  })
+
+  describe('getName()', () => {
+    const mapping = new AbiMapping()
+
+    it('should do nothing when not found', () => {
+      expect(mapping.getName('0x1234', 1)).toEqual(undefined)
     })
   })
 })

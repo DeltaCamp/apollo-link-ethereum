@@ -2,11 +2,13 @@ import { AbiDefinition } from './AbiDefinition'
 
 export class AbiMapping {
   abiMapping: object
-  addressMapping: object
+  nameToAddressMapping: object
+  addressToNameMapping: object
 
   constructor () {
     this.abiMapping = {}
-    this.addressMapping = {}
+    this.nameToAddressMapping = {}
+    this.addressToNameMapping = {}
   }
 
   addAbi(name: string, abiDefinition: AbiDefinition): void {
@@ -24,16 +26,27 @@ export class AbiMapping {
   }
 
   addAddress(name: string, networkId: Number, address: string) {
-    if (!this.addressMapping[name]) {
-      this.addressMapping[name] = {}
+    if (!this.nameToAddressMapping[name]) {
+      this.nameToAddressMapping[name] = {}
     }
-    this.addressMapping[name][networkId] = address
+    if (!this.addressToNameMapping[address]) {
+      this.addressToNameMapping[address] = {}
+    }
+    this.nameToAddressMapping[name][networkId] = address
+    this.addressToNameMapping[address][networkId] = name
   }
 
   getAddress(name: string, networkId: Number) {
-    if (!this.addressMapping[name]) {
-      return null
+    if (!this.nameToAddressMapping[name]) {
+      return undefined
     }
-    return this.addressMapping[name][networkId]
+    return this.nameToAddressMapping[name][networkId]
+  }
+
+  getName(address: string, networkId: Number) {
+    if (!this.addressToNameMapping[address]) {
+      return undefined
+    }
+    return this.addressToNameMapping[address][networkId]
   }
 }
