@@ -1,3 +1,4 @@
+import { Observable, FetchResult } from 'apollo-link'
 import { AbiMapping, EthereumResolver } from 'apollo-link-ethereum'
 
 export class Web3JSResolver implements EthereumResolver {
@@ -31,6 +32,38 @@ export class Web3JSResolver implements EthereumResolver {
       console.error(error)
       return Promise.reject(error.toString())
     }
+  }
+
+  subscribe (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
+    if (fieldDirectives.hasOwnProperty('events')) {
+      return this._subscribeEvents(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
+    }
+  }
+
+  _subscribeEvents (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
+    return new Observable<FetchResult>(observer => {
+      this._getContract(contractName, contractDirectives)
+        .then(contract => {
+          const event = contract.events[fieldName]
+          if (!event) {
+            observer.error(`Contract ${contractName} does not have an event called ${fieldName}`)
+          } else {
+            event(fieldDirectives ? fieldDirectives.events : {})
+              .on('data', (contractEvent) => {
+                observer.next(contractEvent)
+              })
+              .on('changed', (contractEvent) => {
+                observer.next({ changed: contractEvent })
+              })
+              .on('error', (error) => {
+                observer.error(error)
+              })
+          }
+        })
+        .catch(error => {
+          observer.error(error)
+        })
+    })
   }
 
   _call (contract, fieldName, fieldArgs, fieldDirectives): Promise<any> {

@@ -27,6 +27,7 @@ export function resolvePromises(object, accumulator = []) {
       continue
     }
     var value = object[key]
+    if (!value) { return accumulator }
     if (value.promise && value.promise instanceof Promise) {
       if (value.error) {
         accumulator.push(value.error)
