@@ -44,11 +44,9 @@ export class ContractLink extends ApolloLink {
             data: {},
           });
 
-    // console.log('next???????????? ')
-
     return new Observable<FetchResult>(observer => {
 
-      // console.log('observer: ', observer)
+      // console.log('Query operation name: ', operation.operationName)
 
       // Works around race condition between completion and graphql execution
       // finishing. If complete is called during the graphql call, we will
@@ -74,7 +72,6 @@ export class ContractLink extends ApolloLink {
           subscriptions.forEach(subscription => {
             subscription.subscribe({
               next: (_) => {
-                // console.log('ContractLink nexxxt for subscription: ', nextData)
                 observer.next({
                   data: nextData
                 })
@@ -105,12 +102,17 @@ export class ContractLink extends ApolloLink {
         },
         error: observerErrorHandler,
         complete: () => {
+          if (isSubscription) { return }
           if (!handlingNext) {
             observer.complete();
           }
           complete = true;
         },
       })
+
+      return () => {
+        observer.complete()
+      }
     })
   }
 }

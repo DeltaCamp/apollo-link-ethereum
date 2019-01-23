@@ -28,6 +28,7 @@ export const resolverFactory = (ethereumResolver, isSubscription) => {
       let entry
       if (isSubscription) {
         let observable = ethereumResolver.subscribe(contract, contractDirectives, fieldName, args, info.directives)
+        observable['fieldName'] = fieldName
 
         entry = {
           result: null,

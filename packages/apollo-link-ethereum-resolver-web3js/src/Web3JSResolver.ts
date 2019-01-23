@@ -37,32 +37,52 @@ export class Web3JSResolver implements EthereumResolver {
   subscribe (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
     if (fieldDirectives.hasOwnProperty('events')) {
       return this._subscribeEvents(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
+    } else if (fieldDirectives.hasOwnProperty('block')) {
+      return this._subscribeBlock(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
     }
   }
 
-  _subscribeEvents (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
+  _subscribeBlock (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
+    let options = fieldDirectives ? fieldDirectives.block : {}
+    let blockPromise = this.web3.eth.getBlock(options)
+
     return new Observable<FetchResult>(observer => {
+      blockPromise
+        .then(block => {
+          observer.next(block)
+        })
+        .catch(observer.error.bind(observer))
+    })
+  }
+
+  _subscribeEvents (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
+    let eventPromise = new Promise((resolve, reject) => {
       this._getContract(contractName, contractDirectives)
         .then(contract => {
-          const event = contract.events[fieldName]
-          if (!event) {
-            observer.error(`Contract ${contractName} does not have an event called ${fieldName}`)
+          const eventFunction = contract.events[fieldName]
+          if (!eventFunction) {
+            reject(`Contract ${contractName} does not have an event called ${fieldName}`)
           } else {
-            event(fieldDirectives ? fieldDirectives.events : {})
-              .on('data', (contractEvent) => {
-                observer.next(contractEvent)
-              })
-              .on('changed', (contractEvent) => {
-                observer.next({ changed: contractEvent })
-              })
-              .on('error', (error) => {
-                observer.error(error)
-              })
+            let options = fieldDirectives ? fieldDirectives.events : {}
+            resolve(eventFunction(options))
           }
         })
-        .catch(error => {
-          observer.error(error)
-        })
+        .catch(reject)
+    })
+
+    return new Observable<FetchResult>(observer => {
+      eventPromise.then((event: any) => {
+        event
+          .on('data', (contractEvent) => {
+            observer.next(contractEvent)
+          })
+          .on('changed', (contractEvent) => {
+            observer.next({ changed: contractEvent })
+          })
+          .on('error', (error) => {
+            observer.error(error)
+          })
+      })
     })
   }
 
