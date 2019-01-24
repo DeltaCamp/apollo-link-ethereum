@@ -4,6 +4,8 @@ export const globals = {
   'apollo-link': 'apolloLink.core',
   'apollo-utilities': 'apollo.utilities',
   'apollo-link-ethereum': 'apolloLinkWeb3'
+  'web3': 'Web3',
+  'ethers': 'ethers'
 }
 
 export default (name, extraGlobals) => ({

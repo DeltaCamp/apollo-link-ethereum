@@ -1,0 +1,33 @@
+{
+  "name": "apollo-link-ethereum-resolver-ethersjs",
+  "version": "0.0.10",
+  "main": "dist/bundle.umd.js",
+  "modules": "lib/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^23.3.11",
+    "jest": "^23.6.0",
+    "lerna": "^3.9.0",
+    "rollup": "^1.0.1",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "ts-jest": "^23.10.5",
+    "tslib": "^1.9.3",
+    "typescript": "^3.2.2"
+  },
+  "scripts": {
+    "test": "jest --config=jest.config.js",
+    "test-watch": "yarn run test -- --watch",
+    "build": "tsc -p .",
+    "bundle": "rollup -c",
+    "dist": "yarn build && yarn bundle",
+    "watch": "tsc -w -p . & rollup -cw"
+  },
+  "dependencies": {
+    "apollo-link": "^1.2.6",
+    "apollo-link-ethereum": "^0.0.10",
+    "apollo-utilities": "^1.1.2",
+    "ethers": "^4.0.23",
+    "graphql": "^14.1.1",
+    "graphql-anywhere": "^4.1.27"
+  }
+}
