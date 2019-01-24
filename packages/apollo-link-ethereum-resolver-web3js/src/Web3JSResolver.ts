@@ -56,33 +56,27 @@ export class Web3JSResolver implements EthereumResolver {
   }
 
   _subscribeEvents (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
-    let eventPromise = new Promise((resolve, reject) => {
+    return new Observable<FetchResult>(observer => {
       this._getContract(contractName, contractDirectives)
         .then(contract => {
           const eventFunction = contract.events[fieldName]
           if (!eventFunction) {
-            reject(`Contract ${contractName} does not have an event called ${fieldName}`)
+            observer.error(`Contract ${contractName} does not have an event called ${fieldName}`)
           } else {
             let options = fieldDirectives ? fieldDirectives.events : {}
-            resolve(eventFunction(options))
+            eventFunction(options)
+              .on('data', (contractEvent) => {
+                console.log(`Receiving event with name ${fieldName}`)
+                observer.next(contractEvent)
+              })
+              .on('changed', (contractEvent) => {
+                observer.next({ changed: contractEvent })
+              })
+              .on('error', (error) => {
+                observer.error(error)
+              })
           }
         })
-        .catch(reject)
-    })
-
-    return new Observable<FetchResult>(observer => {
-      eventPromise.then((event: any) => {
-        event
-          .on('data', (contractEvent) => {
-            observer.next(contractEvent)
-          })
-          .on('changed', (contractEvent) => {
-            observer.next({ changed: contractEvent })
-          })
-          .on('error', (error) => {
-            observer.error(error)
-          })
-      })
     })
   }
 

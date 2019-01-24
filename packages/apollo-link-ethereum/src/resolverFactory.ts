@@ -1,3 +1,4 @@
+import { Observable, FetchResult } from 'apollo-link'
 import { promiseEntry } from './resolvePromises'
 
 export const resolverFactory = (ethereumResolver, isSubscription) => {
@@ -35,16 +36,20 @@ export const resolverFactory = (ethereumResolver, isSubscription) => {
           error: null
         }
 
-        observable.subscribe({
-          next: (data) => {
-            entry.result = data
-          },
-          error: (error) => {
-            entry.error = error
-          }
+        var dataObservable = new Observable<FetchResult>(observer => {
+          observable.subscribe({
+            next: (data) => {
+              entry.result = data
+              observer.next(data)
+            },
+            error: (error) => {
+              entry.error = error
+              observer.error(error)
+            }
+          })
         })
 
-        subscriptions.push(observable)
+        subscriptions.push(dataObservable)
       } else {
         entry = promiseEntry(ethereumResolver.resolve(contract, contractDirectives, fieldName, args, info.directives))
         promises.push(entry.promise)
