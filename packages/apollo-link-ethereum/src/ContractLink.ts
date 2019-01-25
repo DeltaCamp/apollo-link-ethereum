@@ -69,16 +69,6 @@ export class ContractLink extends ApolloLink {
             resolverAfter
           })
 
-          subscriptions.forEach(subscription => {
-            subscription.subscribe({
-              next: (_) => {
-                observer.next({
-                  data: nextData
-                })
-              }
-            })
-          })
-
           function promiseFinally() {
             var errors = resolvePromises(nextData)
 
@@ -94,11 +84,22 @@ export class ContractLink extends ApolloLink {
             handlingNext = false;
           }
 
-          Promise
-            .all(promises)
-            .then(promiseFinally)
-            .catch(promiseFinally)
-
+          if (isSubscription) {
+            subscriptions.forEach(subscription => {
+              subscription.subscribe({
+                next: (_) => {
+                  observer.next({
+                    data: nextData
+                  })
+                }
+              })
+            })
+          } else {
+            Promise
+              .all(promises)
+              .then(promiseFinally)
+              .catch(promiseFinally)
+          }
         },
         error: observerErrorHandler,
         complete: () => {

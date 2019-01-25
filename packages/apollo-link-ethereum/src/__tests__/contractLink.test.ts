@@ -102,21 +102,15 @@ describe('ContractLink', () => {
       }
     `
 
-    let callback = {
-      cb: null
-    }
+    let web3Observable
 
-    const web3Observable = new Observable<FetchResult>(observer => {
-
-      if (!callback.cb) {
-        callback.cb = function () {
-          observer.next('New Event!!')
-        }
+    var promise = new Promise((resolve, reject) => {
+      web3Observable = {
+        subscribe: jest.fn((observer) => {
+          resolve(observer)
+        })
       }
-
-      return () => {}
     })
-    web3Observable['blah'] = 'test obj'
 
     const ethereumResolver:EthereumResolver = {
       resolve: jest.fn(),
@@ -129,30 +123,27 @@ describe('ContractLink', () => {
       query: sampleQuery,
     })
 
-    const next = jest.fn()
+    const complete = jest.fn()
     const error = jest.fn()
 
-    observable.subscribe({
-      next,
-      error,
-      complete: () => {
-
-        callback.cb()
-
-        expect(next).toHaveBeenCalledTimes(1)
-        expect(next).toHaveBeenCalledWith({
-          data: {
-            CoordinationGame: {
-              allEvents: {
-                result: 'New Event!!',
-                error: null
-              }
+    var subscription: any = observable.subscribe({
+      next: (data) => {
+        expect(data.data).toEqual({
+          CoordinationGame: {
+            allEvents: {
+              result: 'This is the data',
+              error: null
             }
-          },
-          errors: []
+          }
         })
         done()
-      }
+      },
+      error,
+      complete
+    })
+
+    promise.then((observer: any) => {
+      observer.next('This is the data')
     })
   })
 })
