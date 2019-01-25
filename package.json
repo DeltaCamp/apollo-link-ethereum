@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "lerna run test",
-    "dist": "cd packages/apollo-link-ethereum && yarn dist; cd ../apollo-link-ethereum-resolver-web3js && yarn dist",
-    "watch": "lerna run watch"
+    "dist": "lerna run dist",
+    "watch": "lerna run --parallel watch"
   }
 }

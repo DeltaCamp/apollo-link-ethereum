@@ -57,7 +57,11 @@ export class ContractLink extends ApolloLink {
       const observerErrorHandler = observer.error.bind(observer);
 
       obs.subscribe({
-        next: ({ data, errors }) => {
+        next: (args) => {
+          // console.trace()
+          const { data, errors } = args
+          console.log('NEXT!', args)
+
           const context = operation.getContext();
 
           let { resolver, resolverAfter, promises, subscriptions } = resolverFactory(this.ethereumResolver, isSubscription)
@@ -86,6 +90,7 @@ export class ContractLink extends ApolloLink {
 
           if (isSubscription) {
             subscriptions.forEach(subscription => {
+              console.log('subscribing...')
               subscription.subscribe({
                 next: (_) => {
                   observer.next({

@@ -14,8 +14,11 @@ export const resolverFactory = (ethereumResolver, isSubscription) => {
     const preAliasingNode = rootValue[fieldName]; // where data is stored in canonical model
     const aliasNeeded = resultKey !== fieldName;
 
+    console.log(`resolverFactory for ${fieldName} found aliases: ${aliasedNode} ${preAliasingNode} ${aliasNeeded}`)
+
     // if data already exists, return it!
     if (aliasedNode !== undefined || preAliasingNode !== undefined) {
+      console.log(`returning ${aliasedNode || preAliasingNode}`)
       return aliasedNode || preAliasingNode;
     }
 
@@ -37,6 +40,7 @@ export const resolverFactory = (ethereumResolver, isSubscription) => {
         }
 
         var dataObservable = new Observable<FetchResult>(observer => {
+          console.log(`subscribing data update ${fieldName}`)
           observable.subscribe({
             next: (data) => {
               entry.result = data
@@ -57,6 +61,7 @@ export const resolverFactory = (ethereumResolver, isSubscription) => {
       return entry
     }
 
+    console.log(`Returning alias for ${fieldName}...`)
     return (
       // Support nested fields
       (aliasNeeded ? aliasedNode : preAliasingNode) ||

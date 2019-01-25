@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import { ethers } from 'ethers'
 import { Observable, FetchResult } from 'apollo-link'
 import { AbiMapping, EthereumResolver } from 'apollo-link-ethereum'
@@ -6,6 +7,7 @@ export class EthersResolver implements EthereumResolver {
   ethers: any
   abiMapping: AbiMapping
   contractCache: {}
+  ifaceCache: {}
 
   constructor (abiMapping: AbiMapping, ethers?: any) {
     if (!abiMapping) {
@@ -14,6 +16,7 @@ export class EthersResolver implements EthereumResolver {
     this.ethers = ethers
     this.abiMapping = abiMapping
     this.contractCache = {}
+    this.ifaceCache = {}
   }
 
   async resolve (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Promise<any> {
@@ -39,11 +42,15 @@ export class EthersResolver implements EthereumResolver {
   }
 
   _subscribeEvents (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
+    console.log(`Subscribing to ${fieldName}`)
     return new Observable<FetchResult>(observer => {
+      console.log(`New subscriber for ${fieldName}`)
       this._getContract(contractName, contractDirectives)
         .then(contract => {
           const filter = this._getFieldNameFilter(contract, contractName, fieldName)
-          contract.on(filter, (event) => {
+          console.log('Subscribing:::: ', filter)
+          contract.on(filter, function (blockNumber, event) {
+            console.log(`New ${fieldName} event: `, event)
             observer.next(event)
           })
         })
@@ -54,7 +61,14 @@ export class EthersResolver implements EthereumResolver {
     const contract = await this._getContract(contractName, contractDirectives)
     let options = fieldDirectives ? fieldDirectives.pastEvents : {}
     let filter = Object.assign(this._getFieldNameFilter(contract, contractName, fieldName), options)
+    const iface = await this._getInterface(contractName)
     return this.ethers.getLogs(filter)
+      .then(logs =>
+        logs.map(log => ({
+          log,
+          parsedLog: iface.parseLog(log)
+        }))
+      )
   }
 
   _getFieldNameFilter(contract, contractName, fieldName): any {
@@ -67,7 +81,7 @@ export class EthersResolver implements EthereumResolver {
 
     return {
       address: contract.address,
-      fromBlock: '0',
+      fromBlock: 0,
       toBlock: 'latest',
       topics
     }
@@ -91,6 +105,8 @@ export class EthersResolver implements EthereumResolver {
     const network = await this.ethers.getNetwork()
     const { chainId } = network
 
+    console.log('NETWORK CHAIN ID: ', chainId)
+
     if (!this.contractCache[chainId]) {
       this.contractCache[chainId] = {}
     }
@@ -98,6 +114,7 @@ export class EthersResolver implements EthereumResolver {
     let address = contractDirectives ? contractDirectives.address : null
     if (!address) {
       address = this.abiMapping.getAddress(contractName, chainId)
+      console.log(`${contractName} address is ${address}`)
     }
     if (!address) {
       throw new Error(`Address not present in query against abi ${contractName}`)
@@ -112,5 +129,18 @@ export class EthersResolver implements EthereumResolver {
       this.contractCache[chainId][address] = contract
     }
     return contract
+  }
+
+  async _getInterface (contractName) {
+    let iface = this.ifaceCache[contractName]
+    if (!iface) {
+      const abi: any = this.abiMapping.getAbi(contractName)
+      if (!abi) {
+        throw new Error(`Could not find abi for name ${contractName}`)
+      }
+      iface = new ethers.utils.Interface(abi)
+      this.ifaceCache[contractName] = iface
+    }
+    return iface
   }
 }

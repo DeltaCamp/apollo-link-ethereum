@@ -146,4 +146,66 @@ describe('ContractLink', () => {
       observer.next('This is the data')
     })
   })
+
+
+
+  it('should handle subscriptions', (done) => {
+
+    const sampleQuery = gql`
+      subscription SampleQuery {
+        CoordinationGame @contract(address: "0x1111") {
+          allEvents @events
+          SomeEvents @events
+        }
+      }
+    `
+
+    let web3Observable
+
+    var promise = new Promise((resolve, reject) => {
+      web3Observable = {
+        subscribe: jest.fn((observer) => {
+          resolve(observer)
+        })
+      }
+    })
+
+    const ethereumResolver:EthereumResolver = {
+      resolve: jest.fn(),
+      subscribe: jest.fn(() => web3Observable)
+    }
+
+    const contractLink = new ContractLink(ethereumResolver)
+
+    const observable = execute(contractLink, {
+      query: sampleQuery,
+    })
+
+    const complete = jest.fn()
+    const error = jest.fn()
+
+    var subscription: any = observable.subscribe({
+      next: (data) => {
+        expect(data.data).toEqual({
+          CoordinationGame: {
+            SomeEvents: {
+              result: null,
+              error: null
+            },
+            allEvents: {
+              result: 'This is the data',
+              error: null
+            }
+          }
+        })
+        done()
+      },
+      error,
+      complete
+    })
+
+    promise.then((observer: any) => {
+      observer.next('This is the data')
+    })
+  })
 })

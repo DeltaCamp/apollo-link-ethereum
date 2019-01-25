@@ -21,7 +21,12 @@ describe('EthersResolver', () => {
       balanceOf
     }))
     assign({
-      Contract
+      Contract,
+      utils: {
+        Interface: jest.fn().mockImplementation(() => ({
+          parseLog: jest.fn(() => 'ParsedLoggg')
+        }))
+      }
     })
 
     abiMapping = new AbiMapping()
@@ -46,7 +51,7 @@ describe('EthersResolver', () => {
         expect(ethersProvider.getLogs).toHaveBeenCalledTimes(1)
         expect(ethersProvider.getLogs).toHaveBeenCalledWith({
           address: '0x1234',
-          fromBlock: '0',
+          fromBlock: 0,
           toBlock: 'latest',
           topics: []
         })
@@ -60,7 +65,7 @@ describe('EthersResolver', () => {
         expect(ethersProvider.getLogs).toHaveBeenCalledTimes(1)
         expect(ethersProvider.getLogs).toHaveBeenCalledWith({
           address: '0x1234',
-          fromBlock: '0',
+          fromBlock: 0,
           toBlock: '5555',
           topics: [9999]
         })

@@ -1,1 +1,1 @@
-export * from './Web3JSResolver'
+export * from './EthersResolver'
