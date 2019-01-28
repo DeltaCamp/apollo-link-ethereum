@@ -26,7 +26,6 @@ export class EthereumLink extends ApolloLink {
     const { query } = operation
 
     const isEthereum = hasDirectives(['contract', 'block'], query)
-    console.log('isEthereum: ', isEthereum)
     if (!isEthereum) {
       return forward ? forward(operation) : null
     }
