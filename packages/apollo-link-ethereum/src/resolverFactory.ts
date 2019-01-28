@@ -14,25 +14,26 @@ export const resolverFactory = (ethereumResolver, isSubscription) => {
     const preAliasingNode = rootValue[fieldName]; // where data is stored in canonical model
     const aliasNeeded = resultKey !== fieldName;
 
-    console.log(`resolverFactory for ${fieldName} found aliases: ${aliasedNode} ${preAliasingNode} ${aliasNeeded}`)
-
     // if data already exists, return it!
     if (aliasedNode !== undefined || preAliasingNode !== undefined) {
-      console.log(`returning ${aliasedNode || preAliasingNode}`)
       return aliasedNode || preAliasingNode;
     }
 
-    // otherwise, run the web3 resolver
-    // debug(`resolver: `, fieldName, rootValue, args, context, info, contract)
+    const isContract = info.directives && info.directives.hasOwnProperty('contract')
+    const isBlock = info.directives && info.directives.hasOwnProperty('block')
 
-    if (info.directives && info.directives.hasOwnProperty('contract')) {
+    let result
+
+    if (isContract) {
       contract = fieldName
       contractDirectives = info.directives.contract
-    } else if (contract) {
+      result = {}
+    } else if (isBlock || contract) {
       let entry
       if (isSubscription) {
-        let observable = ethereumResolver.subscribe(contract, contractDirectives, fieldName, args, info.directives)
-        observable['fieldName'] = fieldName
+        let observable = ethereumResolver.subscribe(
+          contract, contractDirectives, fieldName, args, info.directives
+        )
 
         entry = {
           result: null,
@@ -40,7 +41,6 @@ export const resolverFactory = (ethereumResolver, isSubscription) => {
         }
 
         var dataObservable = new Observable<FetchResult>(observer => {
-          console.log(`subscribing data update ${fieldName}`)
           observable.subscribe({
             next: (data) => {
               entry.result = data
@@ -55,18 +55,18 @@ export const resolverFactory = (ethereumResolver, isSubscription) => {
 
         subscriptions.push(dataObservable)
       } else {
-        entry = promiseEntry(ethereumResolver.resolve(contract, contractDirectives, fieldName, args, info.directives))
+        entry = promiseEntry(
+          ethereumResolver.resolve(contract, contractDirectives, fieldName, args, info.directives)
+        )
         promises.push(entry.promise)
       }
-      return entry
+      result = entry
+    } else {
+      // Nested fields
+      result = (aliasNeeded ? aliasedNode : preAliasingNode) || {}
     }
 
-    console.log(`Returning alias for ${fieldName}...`)
-    return (
-      // Support nested fields
-      (aliasNeeded ? aliasedNode : preAliasingNode) ||
-      {}
-    );
+    return result
   }
 
   const resolverAfter = (fieldName, rootValue = {}, args, context, info) => {

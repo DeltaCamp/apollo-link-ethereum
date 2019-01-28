@@ -1,9 +1,9 @@
 import { execute, Observable, FetchResult } from 'apollo-link'
 import gql from 'graphql-tag'
-import { ContractLink } from '../ContractLink'
+import { EthereumLink } from '../EthereumLink'
 import { EthereumResolver } from '../EthereumResolver'
 
-describe('ContractLink', () => {
+describe('EthereumLink', () => {
   it('should resolve the promises correctly', done => {
 
     const sampleQuery = gql`
@@ -21,8 +21,8 @@ describe('ContractLink', () => {
       subscribe: jest.fn()
     }
     const next = jest.fn()
-    const contractLink = new ContractLink(ethereumResolver)
-    const observable = execute(contractLink, {
+    const ethereumLink = new EthereumLink(ethereumResolver)
+    const observable = execute(ethereumLink, {
       query: sampleQuery,
     })
     observable.subscribe({
@@ -67,8 +67,8 @@ describe('ContractLink', () => {
     }
     const next = jest.fn()
     const errorHandler = jest.fn()
-    const contractLink = new ContractLink(EthereumResolver)
-    const observable = execute(contractLink, {
+    const ethereumLink = new EthereumLink(EthereumResolver)
+    const observable = execute(ethereumLink, {
       query: sampleQuery,
     })
     observable.subscribe({
@@ -117,9 +117,9 @@ describe('ContractLink', () => {
       subscribe: jest.fn(() => web3Observable)
     }
 
-    const contractLink = new ContractLink(ethereumResolver)
+    const ethereumLink = new EthereumLink(ethereumResolver)
 
-    const observable = execute(contractLink, {
+    const observable = execute(ethereumLink, {
       query: sampleQuery,
     })
 
@@ -147,8 +147,6 @@ describe('ContractLink', () => {
     })
   })
 
-
-
   it('should handle subscriptions', (done) => {
 
     const sampleQuery = gql`
@@ -175,9 +173,9 @@ describe('ContractLink', () => {
       subscribe: jest.fn(() => web3Observable)
     }
 
-    const contractLink = new ContractLink(ethereumResolver)
+    const ethereumLink = new EthereumLink(ethereumResolver)
 
-    const observable = execute(contractLink, {
+    const observable = execute(ethereumLink, {
       query: sampleQuery,
     })
 

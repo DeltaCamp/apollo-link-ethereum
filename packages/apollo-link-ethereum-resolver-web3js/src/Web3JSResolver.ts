@@ -43,16 +43,7 @@ export class Web3JSResolver implements EthereumResolver {
   }
 
   _subscribeBlock (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
-    let options = fieldDirectives ? fieldDirectives.block : {}
-    let blockPromise = this.web3.eth.getBlock(options)
-
-    return new Observable<FetchResult>(observer => {
-      blockPromise
-        .then(block => {
-          observer.next(block)
-        })
-        .catch(observer.error.bind(observer))
-    })
+    throw new Error("subscribe block not implemented")
   }
 
   _subscribeEvents (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
@@ -66,7 +57,6 @@ export class Web3JSResolver implements EthereumResolver {
             let options = fieldDirectives ? fieldDirectives.events : {}
             eventFunction(options)
               .on('data', (contractEvent) => {
-                console.log(`Receiving event with name ${fieldName}`)
                 observer.next(contractEvent)
               })
               .on('changed', (contractEvent) => {

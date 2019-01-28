@@ -25,13 +25,13 @@ Setup a new Apollo Client:
 ```javascript
 import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ContractLink } from 'apollo-link-ethereum'
+import { EthereumLink } from 'apollo-link-ethereum'
 import { Web3JSResolver } from 'apollo-link-ethereum-resolver-web3js'
 import { abiMapping } from './abiMapping'
 import Web3 from 'web3'
 
 const web3Resolver = new Web3JSResolver(abiMapping)
-const contractLink = new ContractLink(web3Resolver)
+const ethereumLink = new EthereumLink(web3Resolver)
 
 const cache = new InMemoryCache({
   addTypename: false
@@ -39,7 +39,7 @@ const cache = new InMemoryCache({
 
 export const apolloClient = new ApolloClient({
   cache,
-  link: contractLink
+  link: ethereumLink
 })
 
 window.ethereum.enable().then(function () {

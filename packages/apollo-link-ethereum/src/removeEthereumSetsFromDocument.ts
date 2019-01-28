@@ -4,12 +4,12 @@ import { checkDocument, removeDirectivesFromDocument } from 'apollo-utilities';
 // Code taken and modified from https://github.com/apollographql/apollo-link-state/blob/master/packages/apollo-link-state/src/utils.ts
 
 const connectionRemoveConfig = {
-  test: (directive: DirectiveNode) => directive.name.value === 'contract',
+  test: (directive: DirectiveNode) => ['contract', 'block'].indexOf(directive.name.value) !== -1,
   remove: true,
 };
 
 const removed = new Map();
-export function removeContractSetsFromDocument(
+export function removeEthereumSetsFromDocument(
   query: DocumentNode,
 ): DocumentNode {
   // caching

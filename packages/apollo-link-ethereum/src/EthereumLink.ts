@@ -4,14 +4,14 @@ import {
   getMainDefinition
 } from 'apollo-utilities'
 import { EthereumResolver } from './EthereumResolver'
-import { removeContractSetsFromDocument } from './removeContractSetsFromDocument'
+import { removeEthereumSetsFromDocument } from './removeEthereumSetsFromDocument'
 import { graphql } from './graphql-anywhere/graphql'
 import { resolvePromises, promiseEntry } from './resolvePromises'
 import { resolverFactory } from './resolverFactory'
 
 // Using some code taken from https://github.com/apollographql/apollo-link-state/blob/master/packages/apollo-link-state/src/index.ts
 
-export class ContractLink extends ApolloLink {
+export class EthereumLink extends ApolloLink {
   ethereumResolver: EthereumResolver
 
   constructor (ethereumResolver?: EthereumResolver) {
@@ -25,12 +25,13 @@ export class ContractLink extends ApolloLink {
   ): Observable<FetchResult> {
     const { query } = operation
 
-    const isContract = hasDirectives(['contract'], query)
-    if (!isContract) {
+    const isEthereum = hasDirectives(['contract', 'block'], query)
+    console.log('isEthereum: ', isEthereum)
+    if (!isEthereum) {
       return forward ? forward(operation) : null
     }
 
-    const nonContractQuery = removeContractSetsFromDocument(query)
+    const nonContractQuery = removeEthereumSetsFromDocument(query)
 
     const defn = getMainDefinition(query)
 
@@ -60,7 +61,6 @@ export class ContractLink extends ApolloLink {
         next: (args) => {
           // console.trace()
           const { data, errors } = args
-          console.log('NEXT!', args)
 
           const context = operation.getContext();
 
@@ -90,7 +90,6 @@ export class ContractLink extends ApolloLink {
 
           if (isSubscription) {
             subscriptions.forEach(subscription => {
-              console.log('subscribing...')
               subscription.subscribe({
                 next: (_) => {
                   observer.next({

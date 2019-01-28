@@ -38,22 +38,28 @@ export class EthersResolver implements EthereumResolver {
   subscribe (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
     if (fieldDirectives.hasOwnProperty('events')) {
       return this._subscribeEvents(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
+    } if (fieldDirectives.hasOwnProperty('block')) {
+      return this._subscribeBlock(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
     }
   }
 
   _subscribeEvents (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
-    console.log(`Subscribing to ${fieldName}`)
     return new Observable<FetchResult>(observer => {
-      console.log(`New subscriber for ${fieldName}`)
       this._getContract(contractName, contractDirectives)
         .then(contract => {
           const filter = this._getFieldNameFilter(contract, contractName, fieldName)
-          console.log('Subscribing:::: ', filter)
           contract.on(filter, function (blockNumber, event) {
-            console.log(`New ${fieldName} event: `, event)
             observer.next(event)
           })
         })
+    })
+  }
+
+  _subscribeBlock (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
+    return new Observable<FetchResult>(observer => {
+      this.ethers.on('block', (block) => {
+        observer.next(block)
+      })
     })
   }
 
@@ -105,8 +111,6 @@ export class EthersResolver implements EthereumResolver {
     const network = await this.ethers.getNetwork()
     const { chainId } = network
 
-    console.log('NETWORK CHAIN ID: ', chainId)
-
     if (!this.contractCache[chainId]) {
       this.contractCache[chainId] = {}
     }
@@ -114,7 +118,6 @@ export class EthersResolver implements EthereumResolver {
     let address = contractDirectives ? contractDirectives.address : null
     if (!address) {
       address = this.abiMapping.getAddress(contractName, chainId)
-      console.log(`${contractName} address is ${address}`)
     }
     if (!address) {
       throw new Error(`Address not present in query against abi ${contractName}`)

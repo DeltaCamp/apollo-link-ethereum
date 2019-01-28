@@ -35,7 +35,8 @@ describe('EthersResolver', () => {
 
     ethersProvider = {
       getNetwork: jest.fn(() => Promise.resolve({ chainId: 1234 })),
-      getLogs: jest.fn(() => Promise.resolve([1, 2, 3]))
+      getLogs: jest.fn(() => Promise.resolve([1, 2, 3])),
+      on: jest.fn()
     }
 
     resolver = new EthersResolver(abiMapping, ethersProvider)
@@ -88,6 +89,18 @@ describe('EthersResolver', () => {
 
         expect(balanceOf).toHaveBeenCalledWith('0x8888', { value: 1 })
       })
+    })
+  })
+
+  describe('@block', () => {
+    it('should subscribe to blocks', async () => {
+      const observable = await resolver.subscribe(null, {}, 'blockAlias', {}, { block: null })
+
+      observable.subscribe({
+        next: jest.fn()
+      })
+
+      expect(ethersProvider.on).toHaveBeenCalledTimes(1)
     })
   })
 })
