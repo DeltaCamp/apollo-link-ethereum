@@ -46,8 +46,6 @@ export class EthereumLink extends ApolloLink {
 
     return new Observable<FetchResult>(observer => {
 
-      // console.log('Query operation name: ', operation.operationName)
-
       // Works around race condition between completion and graphql execution
       // finishing. If complete is called during the graphql call, we will
       // miss out on the result, since the observer will have completed

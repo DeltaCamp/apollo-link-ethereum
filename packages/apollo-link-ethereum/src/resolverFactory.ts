@@ -26,8 +26,12 @@ export const resolverFactory = (ethereumResolver, isSubscription) => {
 
     if (isContract) {
       contract = fieldName
-      contractDirectives = info.directives.contract
-      result = {}
+      contractDirectives = info.directives.contract || {}
+      const __typename: string = contractDirectives.type
+      const id: string = contractDirectives.id
+      result = {
+        __typename, id
+      }
     } else if (isBlock || contract) {
       let entry
       if (isSubscription) {

@@ -8,7 +8,9 @@ describe('EthereumLink', () => {
 
     const sampleQuery = gql`
       query SampleQuery {
-        CoordinationGame @contract {
+        CoordinationGame @contract(type: "Package", id: "test") {
+          id
+          __typename
           game(blah: "test") @options(foo: "bar")
         }
       }
@@ -31,13 +33,15 @@ describe('EthereumLink', () => {
       complete: () => {
 
         expect(mockResolve).toHaveBeenCalledWith(
-          'CoordinationGame', null, 'game', { blah: "test" }, { options: { foo: "bar" } }
+          'CoordinationGame', { type: "Package", id: "test" }, 'game', { blah: "test" }, { options: { foo: "bar" } }
         )
 
         expect(next).toHaveBeenCalledTimes(1)
         expect(next).toHaveBeenCalledWith({
           data: {
             CoordinationGame: {
+              __typename: "Package",
+              id: "test",
               game: resolveData,
             }
           },
