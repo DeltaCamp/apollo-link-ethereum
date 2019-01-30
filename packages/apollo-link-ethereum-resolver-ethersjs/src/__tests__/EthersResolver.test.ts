@@ -1,4 +1,5 @@
 import { EthersResolver } from '../EthersResolver'
+import { ethers as ethersJs } from 'ethers'
 import { AbiMapping, AbiDefinition } from 'apollo-link-ethereum'
 import abi from './abi'
 
@@ -25,7 +26,10 @@ describe('EthersResolver', () => {
       utils: {
         Interface: jest.fn().mockImplementation(() => ({
           parseLog: jest.fn(() => 'ParsedLoggg')
-        }))
+        })),
+        defaultAbiCoder: {
+          encode: jest.fn(() => '0x0000000000000000000000000000000e')
+        }
       }
     })
 
@@ -60,15 +64,17 @@ describe('EthersResolver', () => {
 
       it('should return add extra topics to allEvents', async () => {
         await resolver.resolve(
-          'TheContract', {}, 'allEvents', {}, { pastEvents: { extraTopics: [15] } }
+          'TheContract', {}, 'allEvents', {}, { pastEvents: { extraTopics: { types: ['uint256'], values: [14] } } }
         )
+
+        let xTopic = "0x0000000000000000000000000000000e"
 
         expect(ethersProvider.getLogs).toHaveBeenCalledTimes(1)
         expect(ethersProvider.getLogs).toHaveBeenCalledWith({
           address: '0x1234',
           fromBlock: 0,
           toBlock: 'latest',
-          topics: [null, 15]
+          topics: [null, xTopic]
         })
       })
 
@@ -88,15 +94,17 @@ describe('EthersResolver', () => {
 
       it('should add extra topics to event topics', async () => {
         await resolver.resolve(
-          'TheContract', {}, 'TestEvent', {}, { pastEvents: { toBlock: '5555', extraTopics: [14] } }
+          'TheContract', {}, 'TestEvent', {}, { pastEvents: { toBlock: '5555', extraTopics: { types: ['uint256'], values: [14] } } }
         )
+
+        let xTopic = "0x0000000000000000000000000000000e"
 
         expect(ethersProvider.getLogs).toHaveBeenCalledTimes(1)
         expect(ethersProvider.getLogs).toHaveBeenCalledWith({
           address: '0x1234',
           fromBlock: 0,
           toBlock: '5555',
-          topics: [9999, 14]
+          topics: [9999, xTopic]
         })
       })
     })
