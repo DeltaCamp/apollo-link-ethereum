@@ -47,7 +47,8 @@ export class EthersResolver implements EthereumResolver {
     return new Observable<FetchResult>(observer => {
       this._getContract(contractName, contractDirectives)
         .then(contract => {
-          const filter = this._getFieldNameFilter(contract, contractName, fieldName)
+          let options = fieldDirectives ? fieldDirectives.events : {}
+          const filter = this._getFieldNameFilter(contract, contractName, fieldName, fieldArgs, options)
           contract.on(filter, function (blockNumber, event) {
             observer.next(event)
           })
@@ -66,7 +67,7 @@ export class EthersResolver implements EthereumResolver {
   async _getPastEvents (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives) {
     const contract = await this._getContract(contractName, contractDirectives)
     let options = fieldDirectives ? fieldDirectives.pastEvents : {}
-    let filter = Object.assign(this._getFieldNameFilter(contract, contractName, fieldName), options)
+    let filter = this._getFieldNameFilter(contract, contractName, fieldName, fieldArgs, options)
     const iface = await this._getInterface(contractName)
     return this.ethers.getLogs(filter)
       .then(logs =>
@@ -77,19 +78,26 @@ export class EthersResolver implements EthereumResolver {
       )
   }
 
-  _getFieldNameFilter(contract, contractName, fieldName): any {
-    let topics = []
-    if (fieldName !== 'allEvents') {
-      let filter = contract.filters[fieldName]
-      if (!filter) { throw new Error(`${contractName} does not have an event called ${fieldName}`)}
-      topics = filter().topics
+  _getFieldNameFilter(contract, contractName, fieldName, fieldArgs, options): any {
+    options = options || {}
+
+    let extraTopics = options.extraTopics ? options.extraTopics : []
+
+    let topics
+    if (fieldName === 'allEvents') {
+      topics = [null]
+    } else {
+      let values = Object.keys(fieldArgs || {}).map(key => fieldArgs[key]);
+      let fxnFilter = contract.filters[fieldName]
+      if (!fxnFilter) { throw new Error(`${contractName} does not have an event called ${fieldName}`)}
+      topics = fxnFilter(...values).topics
     }
 
     return {
-      address: contract.address,
-      fromBlock: 0,
-      toBlock: 'latest',
-      topics
+      address: options.address || contract.address,
+      fromBlock: options.fromBlock || 0,
+      toBlock: options.toBlock || 'latest',
+      topics: options.topics ? options.topics.concat(extraTopics) : topics.concat(extraTopics)
     }
   }
 

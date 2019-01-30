@@ -54,7 +54,21 @@ describe('EthersResolver', () => {
           address: '0x1234',
           fromBlock: 0,
           toBlock: 'latest',
-          topics: []
+          topics: [null]
+        })
+      })
+
+      it('should return add extra topics to allEvents', async () => {
+        await resolver.resolve(
+          'TheContract', {}, 'allEvents', {}, { pastEvents: { extraTopics: [15] } }
+        )
+
+        expect(ethersProvider.getLogs).toHaveBeenCalledTimes(1)
+        expect(ethersProvider.getLogs).toHaveBeenCalledWith({
+          address: '0x1234',
+          fromBlock: 0,
+          toBlock: 'latest',
+          topics: [null, 15]
         })
       })
 
@@ -69,6 +83,20 @@ describe('EthersResolver', () => {
           fromBlock: 0,
           toBlock: '5555',
           topics: [9999]
+        })
+      })
+
+      it('should add extra topics to event topics', async () => {
+        await resolver.resolve(
+          'TheContract', {}, 'TestEvent', {}, { pastEvents: { toBlock: '5555', extraTopics: [14] } }
+        )
+
+        expect(ethersProvider.getLogs).toHaveBeenCalledTimes(1)
+        expect(ethersProvider.getLogs).toHaveBeenCalledWith({
+          address: '0x1234',
+          fromBlock: 0,
+          toBlock: '5555',
+          topics: [9999, 14]
         })
       })
     })
