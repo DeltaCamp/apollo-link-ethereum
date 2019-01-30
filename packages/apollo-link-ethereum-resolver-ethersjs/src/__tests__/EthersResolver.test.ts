@@ -12,13 +12,22 @@ describe('EthersResolver', () => {
 
   let balanceOf
 
+  let onCallbackPromise
+
   beforeEach(() => {
     balanceOf = jest.fn(() => Promise.resolve())
+    let onMock
+    onCallbackPromise = new Promise((resolve, reject) => {
+      onMock = jest.fn((filter, cb) => {
+        resolve(cb)
+      })
+    })
     let Contract = jest.fn().mockImplementation(() => ({
       address: '0x1234',
       filters: {
         TestEvent: jest.fn(() => ({ topics: [9999] }))
       },
+      on: onMock,
       balanceOf
     }))
     assign({
@@ -137,6 +146,32 @@ describe('EthersResolver', () => {
       })
 
       expect(ethersProvider.on).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('@events', () => {
+    it('should subscribe to events', async () => {
+      const observable = await resolver.subscribe('TheContract', {}, 'allEvents', {}, { events: null })
+
+      let nextFxn = jest.fn()
+
+      observable.subscribe({
+        next: nextFxn,
+        error: (err) => {
+          console.error(err)
+        }
+      })
+
+      let event = { block: 1234 }
+
+      const onCallback = await onCallbackPromise
+
+      onCallback('arg1', 'arg2', 'arg3', event)
+
+      expect(nextFxn).toHaveBeenCalledWith({
+        args: ['arg1', 'arg2', 'arg3'],
+        event
+      })
     })
   })
 })

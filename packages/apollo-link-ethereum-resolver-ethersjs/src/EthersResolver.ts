@@ -49,9 +49,21 @@ export class EthersResolver implements EthereumResolver {
         .then(contract => {
           let options = fieldDirectives ? fieldDirectives.events : {}
           const filter = this._getFieldNameFilter(contract, contractName, fieldName, fieldArgs, options)
-          contract.on(filter, function (blockNumber, event) {
-            observer.next(event)
+          contract.on(filter, function () {
+            let _arguments = Array.from(arguments)
+            let lastIndex = _arguments.length - 1
+            let event = _arguments[lastIndex]
+            let args = _arguments.slice(0, lastIndex)
+            let data = {
+              args,
+              event
+            }
+            observer.next(data)
           })
+        })
+        .catch(error => {
+          console.error(error)
+          observer.error(error)
         })
     })
   }
