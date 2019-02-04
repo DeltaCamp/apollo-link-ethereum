@@ -14,8 +14,10 @@ describe('EthersResolver', () => {
 
   let onCallbackPromise
 
+  let balanceOfResponse:any = '1234'
+
   beforeEach(() => {
-    balanceOf = jest.fn(() => Promise.resolve())
+    balanceOf = jest.fn(() => Promise.resolve(balanceOfResponse))
     let onMock
     onCallbackPromise = new Promise((resolve, reject) => {
       onMock = jest.fn((filter, cb) => {
@@ -120,19 +122,46 @@ describe('EthersResolver', () => {
 
     describe('@call', () => {
       it('should call by default', async () => {
-        await resolver.resolve(
+        const response = await resolver.resolve(
           'TheContract', {}, 'balanceOf', { address: '0x8888' }, {}
         )
 
         expect(balanceOf).toHaveBeenCalledWith('0x8888')
+        expect(response).toEqual('1234')
       })
 
       it('should call with options', async () => {
-        await resolver.resolve(
+        const response = await resolver.resolve(
           'TheContract', {}, 'balanceOf', { address: '0x8888' }, { call: { value: 1 } }
         )
 
         expect(balanceOf).toHaveBeenCalledWith('0x8888', { value: 1 })
+        expect(response).toEqual('1234')
+      })
+
+      describe('with array arg return', () => {
+
+        beforeEach(() => {
+          balanceOfResponse = [
+            'foo', 'bar'
+          ]
+
+          balanceOfResponse.result1 = 'foo'
+          balanceOfResponse.result2 = 'bar'
+        })
+
+        it('should shape the return values as an object when an array', async () => {
+          const response = await resolver.resolve(
+            'TheContract', {}, 'balanceOf', { address: '0x8888' }, {}
+          )
+
+          expect(response).toEqual({
+            0: 'foo',
+            1: 'bar',
+            result1: 'foo',
+            result2: 'bar'
+          })
+        })
       })
     })
   })

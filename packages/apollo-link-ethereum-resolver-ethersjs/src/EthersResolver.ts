@@ -136,7 +136,13 @@ export class EthersResolver implements EthereumResolver {
       if (options) {
         values = values.concat([options])
       }
-      return contract[fieldName](...values)
+      return contract[fieldName](...values).then(function (returns) {
+        var result = returns
+        if (Array.isArray(returns)) {
+          result = Object.assign({}, returns)
+        }
+        return result
+      })
     }
   }
 
