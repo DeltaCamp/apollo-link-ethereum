@@ -58,6 +58,8 @@ describe('EthereumLink', () => {
     const sampleQuery = gql`
       query SampleQuery {
         CoordinationGame @contract(address: "0x1111") {
+          id
+          __typename
           game(blah: "test") @options(foo: "bar")
         }
       }
@@ -86,6 +88,8 @@ describe('EthereumLink', () => {
         expect(next).toHaveBeenCalledWith({
           data: {
             CoordinationGame: {
+              id: "global",
+              __typename: "CoordinationGame",
               game: null,
             }
           },

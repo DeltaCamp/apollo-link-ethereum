@@ -27,8 +27,8 @@ export const resolverFactory = (ethereumResolver, isSubscription) => {
     if (isContract) {
       contract = fieldName
       contractDirectives = info.directives.contract || {}
-      const __typename: string = contractDirectives.type
-      const id: string = contractDirectives.id
+      const __typename: string = contractDirectives.type || fieldName
+      const id: string = contractDirectives.id || 'global'
       result = {
         __typename, id
       }
