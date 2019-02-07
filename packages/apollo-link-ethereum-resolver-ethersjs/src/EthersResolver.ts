@@ -36,9 +36,9 @@ export class EthersResolver implements EthereumResolver {
   }
 
   subscribe (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
-    if (fieldDirectives.hasOwnProperty('events')) {
+    if (fieldDirectives && fieldDirectives.hasOwnProperty('events')) {
       return this._subscribeEvents(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
-    } if (fieldDirectives.hasOwnProperty('block')) {
+    } if (fieldDirectives && fieldDirectives.hasOwnProperty('block')) {
       return this._subscribeBlock(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
     }
   }
@@ -82,12 +82,12 @@ export class EthersResolver implements EthereumResolver {
     let filter = this._getFieldNameFilter(contract, contractName, fieldName, fieldArgs, options)
     const iface = await this._getInterface(contractName)
     return this.provider.getLogs(filter)
-      .then(logs =>
-        logs.map(log => ({
+      .then(logs => {
+        return logs.map(log => ({
           log,
           parsedLog: iface.parseLog(log)
         }))
-      )
+      })
   }
 
   _getFieldNameFilter(contract, contractName, fieldName, fieldArgs, options): any {
@@ -136,13 +136,18 @@ export class EthersResolver implements EthereumResolver {
       if (options) {
         values = values.concat([options])
       }
-      return contract[fieldName](...values).then(function (returns) {
-        var result = returns
-        if (Array.isArray(returns)) {
-          result = Object.assign({}, returns)
-        }
-        return result
-      })
+      try {
+        return contract[fieldName](...values).then(function (returns) {
+          var result = returns
+          if (Array.isArray(returns)) {
+            result = Object.assign({}, returns)
+          }
+          return result
+        })
+      } catch (error) {
+        console.error(error)
+        throw error
+      }
     }
   }
 
