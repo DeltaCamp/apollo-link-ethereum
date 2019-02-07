@@ -30,6 +30,7 @@ export class EthersResolver implements EthereumResolver {
         return this._call(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
       }
     } catch (error) {
+      console.error(`${contractName}.${fieldName}(${JSON.stringify(fieldArgs)}): `, error.message)
       console.error(error)
       return Promise.reject(error.toString())
     }
@@ -62,6 +63,7 @@ export class EthersResolver implements EthereumResolver {
           })
         })
         .catch(error => {
+          console.error(`${contractName}.${fieldName}(${JSON.stringify(fieldArgs)}): `, error.message)
           console.error(error)
           observer.error(error)
         })
@@ -145,6 +147,7 @@ export class EthersResolver implements EthereumResolver {
           return result
         })
       } catch (error) {
+        console.error(`${contractName}.${fieldName}(${JSON.stringify(fieldArgs)}): `, error.message)
         console.error(error)
         throw error
       }
