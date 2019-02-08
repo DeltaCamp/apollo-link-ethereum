@@ -54,7 +54,9 @@ describe('EthersResolver', () => {
       on: jest.fn()
     }
 
-    resolver = new EthersResolver(abiMapping, ethersProvider)
+    resolver = new EthersResolver({
+      abiMapping, provider: ethersProvider
+    })
   })
 
   describe('resolve()', () => {

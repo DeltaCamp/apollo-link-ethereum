@@ -3,18 +3,32 @@ import { ethers } from 'ethers'
 import { Observable, FetchResult } from 'apollo-link'
 import { AbiMapping, EthereumResolver } from 'apollo-link-ethereum'
 
+class EthersResolverOptions {
+  abiMapping: AbiMapping
+  provider: any
+  defaultFromBlock?: any
+  defaultToBlock?: any
+}
+
 export class EthersResolver implements EthereumResolver {
   provider: any
   abiMapping: AbiMapping
+  defaultFromBlock?: any
+  defaultToBlock?: any
   contractCache: {}
   ifaceCache: {}
 
-  constructor (abiMapping: AbiMapping, provider?: any) {
-    if (!abiMapping) {
+  constructor (options: EthersResolverOptions) {
+    if (!options.abiMapping) {
       throw new Error('abiMapping must be defined')
     }
-    this.provider = provider
-    this.abiMapping = abiMapping
+    if (!options.provider) {
+      throw new Error('provider must be defined')
+    }
+    this.provider = options.provider
+    this.abiMapping = options.abiMapping
+    this.defaultFromBlock = options.defaultFromBlock || 0
+    this.defaultToBlock = options.defaultToBlock || 'latest'
     this.contractCache = {}
     this.ifaceCache = {}
   }
@@ -122,8 +136,8 @@ export class EthersResolver implements EthereumResolver {
 
     return {
       address: options.address || contract.address,
-      fromBlock: options.fromBlock || 0,
-      toBlock: options.toBlock || 'latest',
+      fromBlock: options.fromBlock || this.defaultFromBlock,
+      toBlock: options.toBlock || this.defaultToBlock,
       topics: options.topics ? options.topics.concat(extraTopics) : topics.concat(encodedExtraTopics)
     }
   }
