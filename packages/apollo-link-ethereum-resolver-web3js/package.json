@@ -1,6 +1,6 @@
 {
   "name": "apollo-link-ethereum-resolver-web3js",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "main": "dist/bundle.umd.js",
   "modules": "lib/index.js",
   "license": "MIT",
