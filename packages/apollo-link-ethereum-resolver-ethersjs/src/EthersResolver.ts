@@ -108,6 +108,7 @@ export class EthersResolver implements EthereumResolver {
 
   _getFieldNameFilter(contract, contractName, fieldName, fieldArgs, options): any {
     options = options || {}
+    var extraTopicIndex = 0
 
     let topics
     if (fieldName === 'allEvents') {
@@ -128,10 +129,14 @@ export class EthersResolver implements EthereumResolver {
       throw new Error(`${contractName} events ${fieldName}: extraTopics must have same number of types and values`)
     }
 
-    for (var i in extraTopicTypes) {
-      encodedExtraTopics.push(
-        ethers.utils.defaultAbiCoder.encode([extraTopicTypes[i]], [extraTopicValues[i]])
-      )
+    for (extraTopicIndex = 0; extraTopicIndex < extraTopicTypes.length; extraTopicIndex++) {
+      const type = extraTopicTypes[extraTopicIndex]
+      const value = extraTopicValues[extraTopicIndex]
+      let encodedValue = null
+      if (value) {
+        encodedValue = ethers.utils.defaultAbiCoder.encode([type], [value])
+      }
+      encodedExtraTopics.push(encodedValue)
     }
 
     return {

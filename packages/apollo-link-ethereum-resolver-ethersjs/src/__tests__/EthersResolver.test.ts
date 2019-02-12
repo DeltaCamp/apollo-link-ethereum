@@ -91,6 +91,23 @@ describe('EthersResolver', () => {
         })
       })
 
+
+      it('should return add extra topics to allEvents', async () => {
+        await resolver.resolve(
+          'TheContract', {}, 'allEvents', {}, { pastEvents: { extraTopics: { types: ['address', 'uint256'], values: [null, 14] } } }
+        )
+
+        let xTopic = "0x0000000000000000000000000000000e"
+
+        expect(ethersProvider.getLogs).toHaveBeenCalledTimes(1)
+        expect(ethersProvider.getLogs).toHaveBeenCalledWith({
+          address: '0x1234',
+          fromBlock: 0,
+          toBlock: 'latest',
+          topics: [null, null, xTopic]
+        })
+      })
+
       it('should return certain events', async () => {
         await resolver.resolve(
           'TheContract', {}, 'TestEvent', {}, { pastEvents: { toBlock: '5555' } }
