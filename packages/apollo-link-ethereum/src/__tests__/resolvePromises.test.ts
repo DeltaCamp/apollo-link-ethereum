@@ -1,6 +1,23 @@
 import { resolvePromises } from '../resolvePromises'
 
 describe('resolvePromises', () => {
+  it('should return null for results without errors', () => {
+    const input = {
+      success: {
+        result: 'hello',
+        promise: Promise.resolve()
+      },
+      foo: 'bar',
+      test: [1, 2, 3],
+      error: {
+        result: 'testing',
+        promise: Promise.resolve()
+      }
+    }
+
+    expect(resolvePromises(input)).toEqual(null)
+  })
+
   it('should replace promise structures with values', () => {
 
     const input = {

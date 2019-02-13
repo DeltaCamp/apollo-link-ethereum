@@ -45,7 +45,7 @@ describe('EthereumLink', () => {
               game: resolveData,
             }
           },
-          errors: []
+          errors: null
         })
 
         done()

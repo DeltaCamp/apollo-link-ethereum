@@ -37,5 +37,9 @@ export function resolvePromises(object, accumulator = []) {
       resolvePromises(object[key], accumulator)
     }
   }
-  return accumulator
+  if (accumulator.length) {
+    return accumulator
+  } else {
+    return null
+  }
 }
