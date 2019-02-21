@@ -1,0 +1,31 @@
+{
+  "name": "apollo-link-ethereum-mutations-ethersjs",
+  "version": "0.0.24",
+  "main": "./dist/bundle.umd.js",
+  "modules": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "license": "MIT",
+  "dependencies": {
+    "ethers": "^4.0.26",
+    "graphql": "^14.0.2",
+    "graphql-tag": "^2.10.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.11",
+    "jest": "^23.6.0",
+    "lerna": "^3.9.0",
+    "rollup": "^1.0.1",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "ts-jest": "^23.10.5",
+    "tslib": "^1.9.3",
+    "typescript": "^3.2.2"
+  },
+  "scripts": {
+    "test": "jest --config=jest.config.js",
+    "test-watch": "npm run test -- --watch",
+    "build": "tsc -p .",
+    "bundle": "rollup -c",
+    "dist": "yarn build && yarn bundle",
+    "watch": "tsc -w -p . & rollup -cw"
+  }
+}
