@@ -17,7 +17,7 @@ To see a simple read-only app see the [apollo-link-ethereum-example](https://git
 $ yarn add apollo-link-ethereum
 ```
 
-You'll need to either install the [Web3.js package](./packages/apollo-link-ethereum-resolver-web3js) or the [Ethers.js package](./packages/apollo-link-ethereum-resolver-ethersjs) in order to make calls to Ethereum.
+You'll need to either install the [Ethers.js package](./packages/apollo-link-ethereum-resolver-ethersjs) or the [Web3.js package](./packages/apollo-link-ethereum-resolver-web3js) in order to make calls to Ethereum.  Currently the **Ethers.js** resolver is more robust.
 
 In your app, you'll need to add the [EthereumLink](./packages/apollo-link-ethererum/src/EthereumLink.ts) to your Apollo Client:
 
