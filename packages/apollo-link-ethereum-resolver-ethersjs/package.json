@@ -1,6 +1,6 @@
 {
   "name": "apollo-link-ethereum-resolver-ethersjs",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "main": "dist/bundle.umd.js",
   "modules": "lib/index.js",
   "license": "MIT",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "apollo-link": "^1.2.6",
-    "apollo-link-ethereum": "^0.0.25",
+    "apollo-link-ethereum": "^0.0.26",
     "apollo-utilities": "^1.1.2",
     "ethers": "^4.0.23",
     "graphql": "^14.1.1",
