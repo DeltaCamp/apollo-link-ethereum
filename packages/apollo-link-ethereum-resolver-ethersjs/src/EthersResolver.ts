@@ -139,11 +139,21 @@ export class EthersResolver implements EthereumResolver {
       encodedExtraTopics.push(encodedValue)
     }
 
-    return {
+    const filter = {
       address: options.address || contract.address,
-      fromBlock: options.fromBlock || this.defaultFromBlock,
-      toBlock: options.toBlock || this.defaultToBlock,
+      fromBlock: options.fromBlock ? this._parseBlockNumber(options.fromBlock) : this.defaultFromBlock,
+      toBlock: options.toBlock ? this._parseBlockNumber(options.toBlock) : NaN,
       topics: options.topics ? options.topics.concat(extraTopics) : topics.concat(encodedExtraTopics)
+    }
+
+    return filter
+  }
+
+  _parseBlockNumber (integerString) {
+    if (isNaN(integerString)) {
+      return integerString
+    } else {
+      return parseInt(integerString, 10)
     }
   }
 

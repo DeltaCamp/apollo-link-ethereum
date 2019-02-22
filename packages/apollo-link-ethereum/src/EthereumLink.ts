@@ -26,6 +26,7 @@ export class EthereumLink extends ApolloLink {
     const { query } = operation
 
     const isEthereum = hasDirectives(['contract', 'block'], query)
+
     if (!isEthereum) {
       return forward ? forward(operation) : null
     }
@@ -56,7 +57,6 @@ export class EthereumLink extends ApolloLink {
 
       obs.subscribe({
         next: (args) => {
-          // console.trace()
           const { data, errors } = args
 
           const context = operation.getContext();

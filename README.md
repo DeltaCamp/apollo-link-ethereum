@@ -1,21 +1,20 @@
 # Apollo Ethereum Link
 
-The `apollo-link-ethereum` package allows you to use GraphQL to speak directly to a smart contract on the Ethereum blockchain.
-
-The package integrates with [Apollo Client](https://www.apollographql.com) as a "link".  It is organized into separate packages to allow for different client bindings (i.e. web3js, ethers.js, ethjs)
+`apollo-link-ethereum` allows you to use GraphQL to speak directly to a smart contract on the Ethereum blockchain.  The package integrates with [Apollo Client](https://www.apollographql.com) as a "link".  You can resolve web3 calls using the web3js 1.0 or Ethers.js.  A separate mutations package is available to actually execute transactions.
 
 | Package | Description |
 | --- | --- |
-| [apollo-link-ethereum](./packages/apollo-link-ethereum/README.md) | The main package |
-| [apollo-link-ethereum-resolver-web3js](./packages/apollo-link-ethereum-resolver-web3js) | A package that provides a Web3js 1.0 binding |
-| [apollo-link-ethereum-resolver-ethersjs](./packages/apollo-link-ethereum-resolver-web3js) | A package that provides an Ethers.js binding |
+| [apollo-link-ethereum](./packages/apollo-link-ethereum/README.md) | The base package |
+| [apollo-link-ethereum-resolver-web3js](./packages/apollo-link-ethereum-resolver-web3js) | Resolve calls using Web3js 1.0 |
+| [apollo-link-ethereum-resolver-ethersjs](./packages/apollo-link-ethereum-resolver-ethersjs) | Resolve calls using Ethers.js |
+| [apollo-link-ethereum-mutations-ethersjs](./packages/apollo-link-ethereum-mutations-ethersjs) | Send transactions with Ethers.js |
 
-Check out the example app [apollo-link-ethereum-example](https://github.com/DeltaCamp/apollo-link-ethereum-example)
+To see a simple read-only app see the [apollo-link-ethereum-example](https://github.com/DeltaCamp/apollo-link-ethereum-example).  Otherwise, for a more complex application have a look at [ZeppelinOS Registry](https://github.com/zeppelinos/zos-registry).
 
 # Installation
 
 ```bash
-$ yarn add apollo-link-ethereum apollo-link-ethereum-resolver-web3js
+$ yarn add apollo-link-ethereum apollo-link-ethereum-resolver-ethersjs
 ```
 
 # Usage
