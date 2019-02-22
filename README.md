@@ -1,4 +1,4 @@
-# Apollo Ethereum Link
+# Apollo Link Ethereum
 
 `apollo-link-ethereum` allows you to use GraphQL to speak directly to a smart contract on the Ethereum blockchain.  The package integrates with [Apollo Client](https://www.apollographql.com) as a "link".  You can resolve web3 calls using the web3js 1.0 or Ethers.js.  A separate mutations package is available to actually execute transactions.
 
