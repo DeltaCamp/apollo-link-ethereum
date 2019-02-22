@@ -1,3 +1,3 @@
-# apollo link web3 resolver web3js
+# apollo-link-etherum-resolver-web3js
 
-Requires web3 js 1.0
+Supports a subset of the Ethers.js resolver.  Needs some polish and documentation.
