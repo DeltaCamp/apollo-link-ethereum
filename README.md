@@ -1,4 +1,4 @@
-# Apollo Ethereum Link
+# Apollo Link Ethereum
 
 The `apollo-link-ethereum` package allows you to use GraphQL to speak directly to a smart contract on the Ethereum blockchain.
 
