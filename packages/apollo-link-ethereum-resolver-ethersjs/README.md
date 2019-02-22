@@ -146,7 +146,7 @@ Creates a new EthersResolver.
 
 ## <a id='contract-directive'></a> @contract
 
-Sets up the context of a query containing web3 calls.  This can be used in either a query or a subscription. The field name to which the `@contract` directive is applied will be used as the contract name for ABI and address lookups.
+Sets up the context of a query containing web3 calls.  This can be used in either a query or a subscription. The field name to which the `@contract` directive is applied will be used as the contract name for ABI and address lookups.  You will likely need to use the `type` and `id` arguments to @contract in order for Apollo Client to correctly cache the results.
 
 For example:
 
@@ -165,6 +165,8 @@ Here we see the field `ERC20Token` has the `@contract` directive and is being al
 
 ### @contract Arguments
 
+- `type`: The name to use as the `__typename` for the results.  This is important to Apollo Client so that it can distinguish objects in the cache.  By default it will use the name of the contract, but if you wish to separate sets of calls you can do so with the type argument.
+- `id`: The id to set in the result.  Since Ethereum calls do not generate a GraphQL compliant shape, we can set an id field to help Apollo Client out.
 - `address`: The address of the contract.  Normally this is determined by looking up the address using the [AbiMapping](https://github.com/DeltaCamp/apollo-link-ethereum/blob/master/packages/apollo-link-ethereum/src/AbiMapping.ts).  Otherwise you can override it here.
 
 If you would like to override the address:
