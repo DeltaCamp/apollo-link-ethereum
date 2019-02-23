@@ -1,6 +1,6 @@
 # apollo-link-ethereum-resolver-ethersjs
 
-Ethers.js bindings for [apollo-link-ethereum](../..).
+Ethers.js bindings for [apollo-link-ethereum](../../../..).
 
 # Setup
 
@@ -49,7 +49,7 @@ export const apolloClient = new ApolloClient({
 })
 ```
 
-Now you can use Ethereum contracts as a data source.
+Now you can use Ethereum contracts deployed to a network as a data source.
 
 # Usage
 
@@ -67,9 +67,13 @@ GraphQL queries are supported by custom directives.
 - [`@contract`](#contract-directive): declares that the query and sub-queries are for an Ethereum contract.
 - [`@events`](#events-directive): listens for new events from the containing `@contract`
 
-# Example
+# Example using React
 
 ```javascript
+import React, { Component } from 'react'
+import { Query } from 'react-apollo'
+import { get } from 'lodash'
+
 const GET_TOKEN_INFO = gql`
   query GetTokenInfo($tokenAddress: String!) {
     ERC20Token @contract(address: $tokenAddress) {
@@ -92,7 +96,6 @@ export class App extends Component {
           return (
             <div className="App">
               <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
                 <p>
                   Network Status: {get(data, 'status.isConnected', 'Unknown')}
                 </p>
@@ -106,14 +109,6 @@ export class App extends Component {
                   <br />
                   <i>{(get(data, 'ERC20Token.allEvents') || []).length}</i>
                 </p>
-                <a
-                  className="App-link"
-                  href="https://reactjs.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Learn React
-                </a>
               </header>
             </div>
           )
@@ -239,7 +234,7 @@ const GET_TOKEN_INFO = gql`
 `
 ```
 
-The above query will retrieve all past logs for the ERC20Token contract defined in the AbiMapping.  Because the field name is `allEvents`, topic0 will be a wildcard.  The remaining topics will be interpreted as 'extra topics'.
+The above query will retrieve all past logs with the 3rd indexed Event parameter as the provided $address variable, for the ERC20Token contract defined in the AbiMapping.  Because the field name is `allEvents`, topic0 will be a wildcard.  The remaining topics will be interpreted as 'extra topics'.
 
 You may also wish to look for specific events:
 
