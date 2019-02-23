@@ -1,6 +1,6 @@
 # apollo-link-ethereum-mutations-ethersjs
 
-Allows applications using [Apollo Client](https://www.apollographql.com/) to easily transact with the Ethereum blockchain using [Ethers.js](https://github.com/ethers-io/ethers.js/).  This package uses [Local State Management](https://www.apollographql.com/docs/react/essentials/local-state.html) in Apollo Client to manage Ethereum transactions.
+Allows applications using [Apollo Client](https://www.apollographql.com/docs/tutorial/client.html#apollo-client-setup) to easily transact with the Ethereum blockchain using [Ethers.js](https://github.com/ethers-io/ethers.js/).  This package uses [Local State Management](https://www.apollographql.com/docs/react/essentials/local-state.html) in Apollo Client to manage Ethereum transactions.
 
 # Setup
 
@@ -82,7 +82,7 @@ export const TransactionForm = graphql(sendTransactionMutation, { name: 'sendTra
       if (this.state.transactionId) {
         return null // already sent
       }
-      let data = this.props.sendTransaction({
+      const data = this.props.sendTransaction({
         variables: {
           contractName: 'ERC20Token',
           method: 'approve',
@@ -90,7 +90,7 @@ export const TransactionForm = graphql(sendTransactionMutation, { name: 'sendTra
         }
       })
 
-      let transactionId = data.sendTransaction.id
+      const transactionId = data.sendTransaction.id
 
       this.setState({
         transactionId
