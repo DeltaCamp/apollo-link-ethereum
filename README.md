@@ -1,6 +1,6 @@
 # Apollo Link Ethereum
 
-`apollo-link-ethereum` allows you to use GraphQL to speak directly to a smart contract on the Ethereum blockchain.  The package integrates with [Apollo Client](https://www.apollographql.com) as a "link".  There are several "resolvers" so that you can resolve web3 calls using either web3js 1.0 or Ethers.js.  A separate mutations package is available to actually execute transactions.
+`apollo-link-ethereum` allows you to use GraphQL to speak directly to a smart contract on the Ethereum blockchain.  The package integrates with [Apollo Client](https://www.apollographql.com/docs/tutorial/client.html#apollo-client-setup) as a **[link](https://www.apollographql.com/docs/link/)**.  There are several **[resolvers](https://www.apollographql.com/docs/graphql-tools/resolvers.html#Resolver-map)** so that you can resolve web3 calls using either web3js 1.0 or Ethers.js.  A separate mutations package is available to actually execute transactions (currently only supports ethers.js).
 
 Please see the documentation for each package for more information.
 
@@ -13,7 +13,13 @@ Please see the documentation for each package for more information.
 
 **Examples**
 
-To see a simple read-only app see the [apollo-link-ethereum-example](https://github.com/DeltaCamp/apollo-link-ethereum-example).  Otherwise, for a more complex application have a look at [ZeppelinOS Registry](https://github.com/zeppelinos/zos-registry).
+### Example DApps
+
+1. Here's a simple read-only **Example DApp**:
+<br />[apollo-link-ethereum-example](https://github.com/DeltaCamp/apollo-link-ethereum-example).  
+
+2. A more in-depth application supporting both Ethereum reads (calls) and writes (transactions):
+<br />[ZeppelinOS Registry](https://github.com/zeppelinos/zos-registry)
 
 # Installation
 
