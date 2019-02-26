@@ -4,10 +4,10 @@
 
 | Package | Description |
 | --- | --- |
-| [apollo-link-ethereum](./packages/apollo-link-ethereum/README.md) | The base package |
-| [apollo-link-ethereum-resolver-web3js](./packages/apollo-link-ethereum-resolver-web3js) | Resolve calls using Web3js 1.0 |
-| [apollo-link-ethereum-resolver-ethersjs](./packages/apollo-link-ethereum-resolver-ethersjs) | Resolve calls using Ethers.js |
-| [apollo-link-ethereum-mutations-ethersjs](./packages/apollo-link-ethereum-mutations-ethersjs) | Send transactions with Ethers.js |
+| [apollo-link-ethereum](https://github.com/DeltaCamp/apollo-link-ethereum/tree/master/packages/apollo-link-ethereum) | The base package |
+| [apollo-link-ethereum-resolver-ethersjs](https://github.com/DeltaCamp/apollo-link-ethereum/tree/master/packages/apollo-link-ethereum-resolver-ethersjs) | Resolve calls using Ethers.js |
+| [apollo-link-ethereum-mutations-ethersjs](https://github.com/DeltaCamp/apollo-link-ethereum/tree/master/packages/apollo-link-ethereum-mutations-ethersjs) | Send transactions with Ethers.js |
+| [apollo-link-ethereum-resolver-web3js](https://github.com/DeltaCamp/apollo-link-ethereum/tree/master/packages/apollo-link-ethereum-resolver-web3js) | Resolve calls using Web3js 1.0 |
 
 To see a simple read-only app see the [apollo-link-ethereum-example](https://github.com/DeltaCamp/apollo-link-ethereum-example).  Otherwise, for a more complex application have a look at [ZeppelinOS Registry](https://github.com/zeppelinos/zos-registry).
 
