@@ -2,6 +2,8 @@
 
 ![Apollo Link Ethereum Version on NPM](https://img.shields.io/npm/v/apollo-link-ethereum/latest.svg?color=blue&style=for-the-badge) &nbsp; ![Apollo Link Ethereum Downloads on NPM](https://img.shields.io/npm/dw/apollo-link-ethereum.svg?color=orange&style=for-the-badge)
 
+<br />
+
 # Apollo Link Ethereum
 
 `apollo-link-ethereum` allows you to use GraphQL to speak directly to a smart contract on the Ethereum blockchain.  The package integrates with [Apollo Client](https://www.apollographql.com/docs/tutorial/client.html#apollo-client-setup) as a **[link](https://www.apollographql.com/docs/link/)**.  There are several **[resolvers](https://www.apollographql.com/docs/graphql-tools/resolvers.html#Resolver-map)** so that you can resolve web3 calls using either web3js 1.0 or Ethers.js.  A separate mutations package is available to actually execute transactions (currently only supports ethers.js).
