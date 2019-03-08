@@ -7,6 +7,7 @@ export const transactionFragment = gql`
       values
     }
     contractName
+    contractAddress
     blockNumber
     completed
     error
