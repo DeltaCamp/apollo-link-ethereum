@@ -104,7 +104,7 @@ export async function sendTransaction(
     const unsignedTransaction = {
       data: transactionData,
       to: contract.address,
-      gasLimit: ethers.utils.bigNumberify(90000) // TODO: this needs to be fixed!
+      gasLimit: ethers.utils.bigNumberify(1000000) // TODO: this needs to be fixed!
     }
 
     signer.sendUncheckedTransaction(unsignedTransaction)
