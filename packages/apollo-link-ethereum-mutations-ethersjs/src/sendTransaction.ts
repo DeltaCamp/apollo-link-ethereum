@@ -14,27 +14,33 @@ export async function sendTransaction(
   const { provider, abiMapping } = options
   const { cache, getCacheKey } = context
   try {
-    const { contractName, method, args } = variables
+    let address
+    const { contractName, contractAddress, method, args } = variables
     await enableEthereum()
     const network = await provider.getNetwork()
     const networkId = network.chainId
     const signer = provider.getSigner()
-    const address = abiMapping.getAddress(contractName, networkId)
-    const abi = abiMapping.getAbi(contractName)
 
-    if (!address) {
-      throw new Error(`No address for contract ${contractName} and network ${networkId}`)
+    if (contractAddress) {
+      address = contractAddress
+    } else {
+      try {
+        address = abiMapping.getAddress(contractName, networkId)
+      } catch (e) {
+        throw new Error(`ALE Mutations Error: Unable to find contract '${contractName}' by contractName (perhaps need to pass in contractAddress?). Network ${networkId}`)
+      }
     }
 
+    const abi = abiMapping.getAbi(contractName)
     if (!abi) {
-      throw new Error(`No abi found for contract ${contractName}`)
+      throw new Error(`ALE Mutations Error: No abi found for contract ${contractName} (Forgot to pass contractName ?)`)
     }
 
     const contract = new ethers.Contract(address, abi, signer)
     const methodFxn = contract[method]
 
     if (!methodFxn) {
-      throw new Error(`Unknown function ${method} for contract Vouching`)
+      throw new Error(`ALE Mutations Error: Unknown function ${method} for contract ${contractName}`)
     }
 
     let data = { transactions: [] }
@@ -58,6 +64,7 @@ export async function sendTransaction(
       id: txId,
       method,
       contractName,
+      contractAddress: address,
       completed: false,
       sent: false,
       hash: '',
@@ -79,25 +86,25 @@ export async function sendTransaction(
       return cache.readFragment({ fragment: transactionFragment, id })
     }
 
-    let gasLimit
-    try {
-      gasLimit = await contract.estimate[method](...args)
-    } catch (error) {
-      console.error(error)
-      const transaction = readTx()
-      const data = { ...transaction, error: error.message }
-      cache.writeData({ id, data })
-      return data
-    }
+    // let gasLimit = ethers.utils.bigNumberify(0)
+    // try {
+    //   gasLimit = await contract.estimate[method](...args)
+    // } catch (error) {
+    //   console.error(error)
+    //   const transaction = readTx()
+    //   const data = { ...transaction, error: error.message }
+    //   cache.writeData({ id, data })
+    //   return data
+    // }
 
-    // Hack to ensure it works!
-    const newGasLimit = gasLimit.add(3000)
+    // // Hack to ensure it works!
+    // const newGasLimit = gasLimit.add(90000)
 
     const transactionData = contract.interface.functions[method].encode(args)
     const unsignedTransaction = {
       data: transactionData,
       to: contract.address,
-      gasLimit: newGasLimit
+      gasLimit: ethers.utils.bigNumberify(1000000) // TODO: this needs to be fixed!
     }
 
     signer.sendUncheckedTransaction(unsignedTransaction)
@@ -114,19 +121,19 @@ export async function sendTransaction(
             return receipt
           })
         }, { onceBlock: provider }).catch(error => {
-          console.error(`Unable to get transaction receipt for tx with hash: ${hash} - `, error)
+          console.error(`ALE Mutations Error: Unable to get transaction receipt for tx with hash: ${hash} - `, error)
           throw error
         })
 
         if (receipt.status === 0) {
-          throw new Error(`Ethereum tx had a 0 status. Tx hash: ${hash}`)
+          throw new Error(`ALE Mutations Error: Ethereum tx had a 0 status. Tx hash: ${hash}`)
         }
 
         data = { ...transaction, blockNumber: receipt.blockNumber, completed: true }
         cache.writeData({ id, data })
       })
       .catch(error => {
-        console.error(`Error occured while sending transaction`, error)
+        console.error(`ALE Mutations Error: Error occured while sending transaction`, error)
 
         const transaction = readTx()
         const data = { ...transaction, sent: true, completed: true, error: error.message }
