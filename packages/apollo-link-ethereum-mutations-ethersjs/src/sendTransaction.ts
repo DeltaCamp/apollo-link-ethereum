@@ -16,6 +16,7 @@ export async function sendTransaction(
   try {
     let address
     const { contractName, contractAddress, method, args, gasLimit } = variables
+    
     await enableEthereum()
     const network = await provider.getNetwork()
     const networkId = network.chainId
