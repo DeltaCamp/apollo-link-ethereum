@@ -1,6 +1,6 @@
 {
   "name": "apollo-link-ethereum-mutations-ethersjs",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "main": "./dist/bundle.umd.js",
   "modules": "./lib/index.js",
   "typings": "./lib/index.d.ts",
