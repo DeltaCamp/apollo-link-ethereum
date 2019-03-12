@@ -5,13 +5,15 @@ export const sendTransactionMutation = gql`
     $contractName: String!,
     $contractAddress: String,
     $method: String!,
-    $args: Object!
+    $args: Object!,
+    $gasLimit: String!
   ) {
     sendTransaction(
       contractName: $contractName,
       contractAddress: $contractAddress,
       method: $method,
-      args: $args
+      args: $args,
+      gasLimit: $gasLimit
     ) @client
   }
 `
