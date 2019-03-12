@@ -70,7 +70,7 @@ describe('EthersResolver', () => {
         expect(ethersProvider.getLogs).toHaveBeenCalledWith({
           address: '0x1234',
           fromBlock: 0,
-          toBlock: 'latest',
+          toBlock: NaN,
           topics: [null]
         })
       })
@@ -86,7 +86,7 @@ describe('EthersResolver', () => {
         expect(ethersProvider.getLogs).toHaveBeenCalledWith({
           address: '0x1234',
           fromBlock: 0,
-          toBlock: 'latest',
+          toBlock: NaN,
           topics: [null, xTopic]
         })
       })
@@ -103,7 +103,7 @@ describe('EthersResolver', () => {
         expect(ethersProvider.getLogs).toHaveBeenCalledWith({
           address: '0x1234',
           fromBlock: 0,
-          toBlock: 'latest',
+          toBlock: NaN,
           topics: [null, null, xTopic]
         })
       })
@@ -117,7 +117,7 @@ describe('EthersResolver', () => {
         expect(ethersProvider.getLogs).toHaveBeenCalledWith({
           address: '0x1234',
           fromBlock: 0,
-          toBlock: '5555',
+          toBlock: 5555,
           topics: [9999]
         })
       })
@@ -133,7 +133,7 @@ describe('EthersResolver', () => {
         expect(ethersProvider.getLogs).toHaveBeenCalledWith({
           address: '0x1234',
           fromBlock: 0,
-          toBlock: '5555',
+          toBlock: 5555,
           topics: [9999, xTopic]
         })
       })

@@ -15,7 +15,7 @@ export async function sendTransaction(
   const { cache, getCacheKey } = context
   try {
     let address
-    const { contractName, contractAddress, method, args } = variables
+    const { contractName, contractAddress, method, args, gasLimit } = variables
     await enableEthereum()
     const network = await provider.getNetwork()
     const networkId = network.chainId
@@ -100,11 +100,12 @@ export async function sendTransaction(
     // // Hack to ensure it works!
     // const newGasLimit = gasLimit.add(90000)
 
+    const defaultGasLimit = ethers.utils.bigNumberify(1000000)
     const transactionData = contract.interface.functions[method].encode(args)
     const unsignedTransaction = {
       data: transactionData,
       to: contract.address,
-      gasLimit: ethers.utils.bigNumberify(1000000) // TODO: this needs to be fixed!
+      gasLimit: gasLimit || defaultGasLimit
     }
 
     signer.sendUncheckedTransaction(unsignedTransaction)
