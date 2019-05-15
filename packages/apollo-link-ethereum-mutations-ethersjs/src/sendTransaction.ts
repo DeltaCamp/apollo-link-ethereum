@@ -5,6 +5,8 @@ import { allTransactionsQuery, transactionFragment } from './gql/index'
 
 let nextTxId = 1
 
+const debug = require('debug')('apollo-link-ethereum-resolver-ethersjs:sendTransaction')
+
 export async function sendTransaction(
   options, // ethers provider and apollo-link-ethereum abiMapping
   parentFieldResult, // parent field result
@@ -87,27 +89,38 @@ export async function sendTransaction(
       return cache.readFragment({ fragment: transactionFragment, id })
     }
 
-    // let gasLimit = ethers.utils.bigNumberify(0)
-    // try {
-    //   gasLimit = await contract.estimate[method](...args)
-    // } catch (error) {
-    //   console.error(error)
-    //   const transaction = readTx()
-    //   const data = { ...transaction, error: error.message }
-    //   cache.writeData({ id, data })
-    //   return data
-    // }
+    let estimatedGasLimit
+    try {
+      estimatedGasLimit = await contract.estimate[method](...args)
+    } catch (error) {
+      console.error(error)
+      // const transaction = readTx()
+      // const data = { ...transaction, error: error.message }
+      // cache.writeData({ id, data })
+      // return data
+    }
 
     // // Hack to ensure it works!
     // const newGasLimit = gasLimit.add(90000)
 
     const defaultGasLimit = ethers.utils.bigNumberify(1000000)
     const transactionData = contract.interface.functions[method].encode(args)
+    const selectedGasLimit = gasLimit || estimatedGasLimit || defaultGasLimit
     const unsignedTransaction = {
       data: transactionData,
       to: contract.address,
-      gasLimit: gasLimit || defaultGasLimit
+      gasLimit: selectedGasLimit
     }
+
+    const from = await signer.getAddress()
+
+    debug(
+`ContractName: ${contractName}\n
+ContractAddress: ${contractAddress}\n
+ContractMethod: ${method}\n
+ContractArgs: ${args}\n\n
+From: ${from}\n\n
+with gasLimit ${selectedGasLimit.toString()}:\n\n`, unsignedTransaction)
 
     signer.sendUncheckedTransaction(unsignedTransaction)
       .then(async function (hash) {
@@ -123,19 +136,23 @@ export async function sendTransaction(
             return receipt
           })
         }, { onceBlock: provider }).catch(error => {
-          console.error(`ALE Mutations Error: Unable to get transaction receipt for tx with hash: ${hash} - `, error)
+          const data = { ...transaction, sent: true, completed: true, error: `Failed getting receipt` }
+          cache.writeData({ id, data })
+          debug(`ALE Mutations Error: Unable to get transaction receipt for tx with hash: ${hash} - `, error)
           throw error
         })
 
         if (receipt.status === 0) {
-          throw new Error(`ALE Mutations Error: Ethereum tx had a 0 status. Tx hash: ${hash}`)
+          const data = { ...transaction, sent: true, completed: true, error: `Status is 0` }
+          cache.writeData({ id, data })
+          debug(`ALE Mutations Error: Ethereum tx had a 0 status. Tx hash: ${hash}`)
+        } else {
+          data = { ...transaction, blockNumber: receipt.blockNumber, completed: true }
+          cache.writeData({ id, data })
         }
-
-        data = { ...transaction, blockNumber: receipt.blockNumber, completed: true }
-        cache.writeData({ id, data })
       })
       .catch(error => {
-        console.error(`ALE Mutations Error: Error occured while sending transaction`, error)
+        debug(`ALE Mutations Error: Error occured while sending transaction`, error)
 
         const transaction = readTx()
         const data = { ...transaction, sent: true, completed: true, error: error.message }

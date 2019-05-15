@@ -748,10 +748,10 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-apollo-link-ethereum@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/apollo-link-ethereum/-/apollo-link-ethereum-0.0.10.tgz#4f08662fc4392fb17868f3d2bb16bda25b343441"
-  integrity sha512-poPIiq05CFM0K7GAy187MszdCpUbQmCpfqeMRzur132WxA/kESt5E+ZB2YJbl1F4FVu77qhtJhpe8WYYm33ozw==
+apollo-link-ethereum@^0.0.32:
+  version "0.0.32"
+  resolved "https://registry.yarnpkg.com/apollo-link-ethereum/-/apollo-link-ethereum-0.0.32.tgz#877a896033c1a05db0e4e7cab0cddfa749c2896a"
+  integrity sha512-gemELT4jgHVXDVHWgthjANveCN6XDT95TWQ8YLq4craQohR92WmS+959wm4WCXsMq8NPF4unwgSFo2IZH/hQNw==
   dependencies:
     apollo-link "^1.2.6"
     apollo-utilities "^1.0.27"

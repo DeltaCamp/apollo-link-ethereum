@@ -3,6 +3,8 @@ import { ethers } from 'ethers'
 import { Observable, FetchResult } from 'apollo-link'
 import { AbiMapping, EthereumResolver } from 'apollo-link-ethereum'
 
+const debug = require('debug')('apollo-link-ethereum-resolver-ethersjs:EthersResolver')
+
 class EthersResolverOptions {
   abiMapping: AbiMapping
   provider: any
@@ -34,6 +36,7 @@ export class EthersResolver implements EthereumResolver {
   }
 
   async resolve (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Promise<any> {
+    debug(`resolve(${contractName}#${fieldName})`)
     try {
       fieldDirectives = fieldDirectives || {}
       fieldArgs = fieldArgs || {}
@@ -51,6 +54,7 @@ export class EthersResolver implements EthereumResolver {
   }
 
   subscribe (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
+    debug(`subscribe(${contractName}#${fieldName})`)
     if (fieldDirectives && fieldDirectives.hasOwnProperty('events')) {
       return this._subscribeEvents(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
     } if (fieldDirectives && fieldDirectives.hasOwnProperty('block')) {
@@ -95,6 +99,7 @@ export class EthersResolver implements EthereumResolver {
   async _getPastEvents (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives) {
     const contract = await this._getContract(contractName, contractDirectives)
     let options = fieldDirectives ? fieldDirectives.pastEvents : {}
+    debug(`getPastEvents(${contractName}#${fieldName}`)
     let filter = this._getFieldNameFilter(contract, contractName, fieldName, fieldArgs, options)
     const iface = await this._getInterface(contractName)
     return this.provider.getLogs(filter)
@@ -145,6 +150,8 @@ export class EthersResolver implements EthereumResolver {
       toBlock: options.toBlock ? this._parseBlockNumber(options.toBlock) : NaN,
       topics: options.topics ? options.topics.concat(extraTopics) : topics.concat(encodedExtraTopics)
     }
+
+    debug(`getFieldNameFilter(${contract}, ${contractName}, ${fieldName}: `, filter)
 
     return filter
   }
@@ -220,6 +227,7 @@ export class EthersResolver implements EthereumResolver {
       iface = new ethers.utils.Interface(abi)
       this.ifaceCache[contractName] = iface
     }
+    debug(`getInterface(${contractName}): `, iface)
     return iface
   }
 }

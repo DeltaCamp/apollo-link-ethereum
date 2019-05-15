@@ -11,6 +11,8 @@ import { resolverFactory } from './resolverFactory'
 
 // Using some code taken from https://github.com/apollographql/apollo-link-state/blob/master/packages/apollo-link-state/src/index.ts
 
+const debug = require('debug')('apollo-link-ethereum:EthereumLink')
+
 export class EthereumLink extends ApolloLink {
   ethereumResolver: EthereumResolver
 
@@ -53,11 +55,17 @@ export class EthereumLink extends ApolloLink {
       let complete = false;
       let handlingNext = false;
 
-      const observerErrorHandler = observer.error.bind(observer);
+      const observerErrorHandler = (error) => {
+        console.error('wtf? ', error)
+      }
 
       obs.subscribe({
         next: (args) => {
           const { data, errors } = args
+
+          if (errors) {
+            console.error('many errors: ', errors)
+          }
 
           const context = operation.getContext();
 
@@ -72,6 +80,18 @@ export class EthereumLink extends ApolloLink {
 
           function promiseFinally() {
             var errors = resolvePromises(nextData)
+
+            debug(`promiseFinally: `, nextData, ` errors: `, errors)
+
+            if (errors && errors.length) {
+              errors = [
+                {
+                  message: `Error resolving query:\n\n ${JSON.stringify(defn)}:\n\n ${JSON.stringify(errors)}\n\n`,
+                  query,
+                  errors
+                }
+              ]
+            }
 
             observer.next({
               data: nextData,
@@ -89,6 +109,7 @@ export class EthereumLink extends ApolloLink {
             subscriptions.forEach(subscription => {
               subscription.subscribe({
                 next: (_) => {
+                  debug(`subscription.subscribe: `, nextData)
                   observer.next({
                     data: nextData
                   })
