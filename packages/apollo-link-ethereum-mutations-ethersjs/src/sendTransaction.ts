@@ -5,7 +5,7 @@ import { allTransactionsQuery, transactionFragment } from './gql/index'
 
 let nextTxId = 1
 
-const debug = require('debug')('apollo-link-ethereum-resolver-ethersjs:sendTransaction')
+const debug = require('debug')('apollo-link-ethereum-mutations-ethersjs:sendTransaction')
 
 export async function sendTransaction(
   options, // ethers provider and apollo-link-ethereum abiMapping
@@ -32,6 +32,10 @@ export async function sendTransaction(
       } catch (e) {
         throw new Error(`ALE Mutations Error: Unable to find contract '${contractName}' by contractName (perhaps need to pass in contractAddress?). Network ${networkId}`)
       }
+    }
+
+    if (!address) {
+      throw new Error(`ALE Mutations Error: address for ${contractName} is not defined`)
     }
 
     const abi = abiMapping.getAbi(contractName)
@@ -116,7 +120,7 @@ export async function sendTransaction(
 
     debug(
 `ContractName: ${contractName}\n
-ContractAddress: ${contractAddress}\n
+ContractAddress: ${address}\n
 ContractMethod: ${method}\n
 ContractArgs: ${args}\n\n
 From: ${from}\n\n

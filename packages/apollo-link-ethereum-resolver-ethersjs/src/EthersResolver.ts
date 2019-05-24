@@ -122,8 +122,10 @@ export class EthersResolver implements EthereumResolver {
       let values = Object.keys(fieldArgs || {}).map(key => fieldArgs[key]);
       let fxnFilter = contract.filters[fieldName]
       if (!fxnFilter) { throw new Error(`${contractName} does not have an event called ${fieldName}`)}
+      debug('getFieldNameFilter fxnFilter values: ', values, ' for args: ', fieldArgs)
       topics = fxnFilter(...values).topics
     }
+    debug('getFieldNameFilter topics: ', topics)
 
     let extraTopics = options.extraTopics ? options.extraTopics : {}
     let extraTopicTypes = extraTopics.types || []
@@ -147,7 +149,7 @@ export class EthersResolver implements EthereumResolver {
     const filter = {
       address: options.address || contract.address,
       fromBlock: options.fromBlock ? this._parseBlockNumber(options.fromBlock) : this.defaultFromBlock,
-      toBlock: options.toBlock ? this._parseBlockNumber(options.toBlock) : NaN,
+      toBlock: options.toBlock ? this._parseBlockNumber(options.toBlock) : this.defaultToBlock,
       topics: options.topics ? options.topics.concat(extraTopics) : topics.concat(encodedExtraTopics)
     }
 
