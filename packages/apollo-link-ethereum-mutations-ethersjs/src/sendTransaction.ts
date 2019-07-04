@@ -1,5 +1,4 @@
 import { ethers } from 'ethers'
-import { poll } from 'ethers/utils/web'
 import { enableEthereum } from './enableEthereum'
 import { allTransactionsQuery, transactionFragment } from './gql/index'
 
@@ -133,7 +132,7 @@ with gasLimit ${selectedGasLimit.toString()}:\n\n`, unsignedTransaction)
         cache.writeData({ id, data })
         transaction = readTx()
 
-        const receipt = await poll(() => {
+        const receipt = await ethers.utils.poll(() => {
           return provider.getTransactionReceipt(hash).then(receipt => {
             if (receipt === null) { return undefined }
 

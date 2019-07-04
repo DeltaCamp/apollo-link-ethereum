@@ -1998,10 +1998,10 @@ esutils@^2.0.2:
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.2.tgz#0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
   integrity sha1-Cr9PHKpbyx96nYrMbepPqqBLrJs=
 
-ethers@^4.0.26:
-  version "4.0.26"
-  resolved "https://registry.yarnpkg.com/ethers/-/ethers-4.0.26.tgz#a4b17184a0ed3db9c88d1b6d28beaa7d0e0ba3e4"
-  integrity sha512-3hK4S8eAGhuWZ/feip5z17MswjGgjb4lEPJqWO/O0dNqToYLSHhvu6gGQPs8d9f+XfpEB2EYexfF0qjhWiZjUA==
+ethers@^4.0.32:
+  version "4.0.32"
+  resolved "https://registry.yarnpkg.com/ethers/-/ethers-4.0.32.tgz#46378864cb3bf29b57c2effd17508b560743abf6"
+  integrity sha512-r0k2tBNF6MYEsvwmINeP3VPppD/7eAZyiOk/ifDDawXGCKqr3iEQkPq6OZSDVD+4Jie38WPteS9thXzpn2+A5Q==
   dependencies:
     "@types/node" "^10.3.2"
     aes-js "3.0.0"

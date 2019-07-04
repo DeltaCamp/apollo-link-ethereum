@@ -27,7 +27,7 @@
     "apollo-link-ethereum": "^0.0.34",
     "apollo-utilities": "^1.1.2",
     "debug": "^4.1.1",
-    "ethers": "^4.0.23",
+    "ethers": "^4.0.32",
     "graphql": "^14.1.1",
     "graphql-anywhere": "^4.1.27"
   }

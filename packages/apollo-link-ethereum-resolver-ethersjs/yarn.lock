@@ -748,16 +748,6 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-apollo-link-ethereum@^0.0.32:
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/apollo-link-ethereum/-/apollo-link-ethereum-0.0.32.tgz#877a896033c1a05db0e4e7cab0cddfa749c2896a"
-  integrity sha512-gemELT4jgHVXDVHWgthjANveCN6XDT95TWQ8YLq4craQohR92WmS+959wm4WCXsMq8NPF4unwgSFo2IZH/hQNw==
-  dependencies:
-    apollo-link "^1.2.6"
-    apollo-utilities "^1.0.27"
-    debug "^4.1.1"
-    graphql-anywhere "^4.1.24"
-
 apollo-link@^1.2.6:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.6.tgz#d9b5676d79c01eb4e424b95c7171697f6ad2b8da"
@@ -766,7 +756,7 @@ apollo-link@^1.2.6:
     apollo-utilities "^1.0.0"
     zen-observable-ts "^0.8.13"
 
-apollo-utilities@^1.0.0, apollo-utilities@^1.0.27, apollo-utilities@^1.1.2:
+apollo-utilities@^1.0.0, apollo-utilities@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.1.2.tgz#aa5eca9d1f1eb721c381a22e0dde03559d856db3"
   integrity sha512-EjDx8vToK+zkWIxc76ZQY/irRX52puNg04xf/w8R0kVTDAgHuVfnFVC01O5vE25kFnIaa5em0pFI0p9b6YMkhQ==
@@ -2578,7 +2568,7 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.15.tgz#ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
   integrity sha512-6uHUhOPEBgQ24HM+r6b/QwWfZq+yiFcipKFrOFiBEnWdy5sdzYoi+pJeQaPI5qOLRFqWmAXUPQNsielzdLoecA==
 
-graphql-anywhere@^4.1.24, graphql-anywhere@^4.1.27:
+graphql-anywhere@^4.1.27:
   version "4.1.27"
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.27.tgz#7d013b4c51039ea6c46839a53abe924f8fffd4f3"
   integrity sha512-ErASfs9siEMrmroHU0V4heh6cIdA8K/SoYpahJFgEM6YDAwUZuycTAKIrMaK8XJI37sHZWcujF/ySuYnIkP5vw==

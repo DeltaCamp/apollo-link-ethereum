@@ -6,7 +6,7 @@
   "typings": "./lib/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "ethers": "^4.0.26",
+    "ethers": "^4.0.32",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.1"
   },
