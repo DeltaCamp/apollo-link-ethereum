@@ -13,7 +13,7 @@ export async function sendTransaction(
   context, // context object
 ) {
   const { provider, abiMapping } = options
-  const { cache, getCacheKey } = context
+  const { cache } = context
   try {
     let address
     const { contractName, contractAddress, method, args, gasLimit } = variables
