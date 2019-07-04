@@ -1,5 +1,4 @@
 import { ethers } from 'ethers'
-import { enableEthereum } from './enableEthereum'
 import { allTransactionsQuery, transactionFragment } from './gql/index'
 
 let nextTxId = 1
@@ -18,7 +17,6 @@ export async function sendTransaction(
     let address
     const { contractName, contractAddress, method, args, gasLimit } = variables
     
-    await enableEthereum()
     const network = await provider.getNetwork()
     const networkId = network.chainId
     const signer = provider.getSigner()
