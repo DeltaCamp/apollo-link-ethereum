@@ -1,6 +1,6 @@
 {
   "name": "apollo-link-ethereum-resolver-web3js",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "main": "dist/bundle.umd.js",
   "modules": "lib/index.js",
   "license": "MIT",
@@ -26,8 +26,8 @@
     "web3": "^1.0.0-beta.37"
   },
   "dependencies": {
-    "apollo-link-ethereum": "^0.0.34",
     "apollo-link": "^1.2.6",
+    "apollo-link-ethereum": "^0.0.35",
     "apollo-utilities": "^1.1.2",
     "graphql": "^14.1.1",
     "graphql-anywhere": "^4.1.27"
