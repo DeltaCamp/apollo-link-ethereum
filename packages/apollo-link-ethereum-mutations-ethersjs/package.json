@@ -6,9 +6,11 @@
   "typings": "./lib/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "ethers": "^4.0.32",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.1"
+  },
+  "peerDependencies": {
+    "ethers": "^4.0.32"
   },
   "devDependencies": {
     "@types/jest": "^23.3.11",
