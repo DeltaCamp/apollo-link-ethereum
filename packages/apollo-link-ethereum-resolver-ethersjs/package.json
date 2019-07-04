@@ -1,12 +1,12 @@
 {
   "name": "apollo-link-ethereum-resolver-ethersjs",
-  "version": "0.0.36",
+  "version": "0.0.37",
   "main": "dist/bundle.umd.js",
   "modules": "lib/index.js",
   "license": "MIT",
   "devDependencies": {
-    "ethers": "^4.0.32",
     "@types/jest": "^23.3.11",
+    "ethers": "^4.0.32",
     "jest": "^23.6.0",
     "lerna": "^3.9.0",
     "rollup": "^1.0.1",
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "apollo-link": "^1.2.6",
-    "apollo-link-ethereum": "^0.0.36",
+    "apollo-link-ethereum": "^0.0.37",
     "apollo-utilities": "^1.1.2",
     "debug": "^4.1.1",
     "graphql": "^14.1.1",
