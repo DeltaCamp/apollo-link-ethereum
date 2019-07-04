@@ -5,6 +5,7 @@
   "modules": "lib/index.js",
   "license": "MIT",
   "devDependencies": {
+    "ethers": "^4.0.32",
     "@types/jest": "^23.3.11",
     "jest": "^23.6.0",
     "lerna": "^3.9.0",
