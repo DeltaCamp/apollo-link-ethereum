@@ -63,6 +63,11 @@ export async function sendTransaction(
       __typename: 'JSON'
     }
 
+    let actualValue = ethers.utils.bigNumberify('0')
+    if (value) {
+      actualValue = ethers.utils.bigNumberify(value)
+    }
+
     const newTx = {
       __typename: 'Transaction',
       id: txId,
@@ -75,7 +80,7 @@ export async function sendTransaction(
       error: '',
       blockNumber: null,
       args: newArgs,
-      value
+      value: actualValue
     }
 
     if (data.transactions) {
@@ -105,6 +110,7 @@ export async function sendTransaction(
     // // Hack to ensure it works!
     // const newGasLimit = gasLimit.add(90000)
 
+    
     const defaultGasLimit = ethers.utils.bigNumberify(1000000)
     const transactionData = contract.interface.functions[method].encode(args)
     const selectedGasLimit = gasLimit || estimatedGasLimit || defaultGasLimit
@@ -112,7 +118,7 @@ export async function sendTransaction(
       data: transactionData,
       to: contract.address,
       gasLimit: selectedGasLimit,
-      value
+      value: actualValue
     }
 
     const from = await signer.getAddress()
