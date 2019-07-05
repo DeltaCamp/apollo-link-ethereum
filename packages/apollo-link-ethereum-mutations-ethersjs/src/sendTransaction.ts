@@ -15,7 +15,7 @@ export async function sendTransaction(
   const { cache } = context
   try {
     let address
-    const { contractName, contractAddress, method, args, gasLimit } = variables
+    const { contractName, contractAddress, method, args, gasLimit, value } = variables
     
     const network = await provider.getNetwork()
     const networkId = network.chainId
@@ -74,7 +74,8 @@ export async function sendTransaction(
       hash: '',
       error: '',
       blockNumber: null,
-      args: newArgs
+      args: newArgs,
+      value
     }
 
     if (data.transactions) {
@@ -110,7 +111,8 @@ export async function sendTransaction(
     const unsignedTransaction = {
       data: transactionData,
       to: contract.address,
-      gasLimit: selectedGasLimit
+      gasLimit: selectedGasLimit,
+      value
     }
 
     const from = await signer.getAddress()
