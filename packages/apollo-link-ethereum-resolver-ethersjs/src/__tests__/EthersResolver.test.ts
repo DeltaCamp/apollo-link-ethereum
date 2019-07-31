@@ -14,10 +14,14 @@ describe('EthersResolver', () => {
 
   let onCallbackPromise
 
-  let balanceOfResponse:any = '1234'
+  let decodeOutput:any = [1234]
 
   beforeEach(() => {
-    balanceOf = jest.fn(() => Promise.resolve(balanceOfResponse))
+    balanceOf = {
+      encode: jest.fn(),
+      decode: jest.fn(() => decodeOutput),
+      outputs: new Array(decodeOutput.length)
+    }
     let onMock
     onCallbackPromise = new Promise((resolve, reject) => {
       onMock = jest.fn((filter, cb) => {
@@ -28,6 +32,11 @@ describe('EthersResolver', () => {
       address: '0x1234',
       filters: {
         TestEvent: jest.fn(() => ({ topics: [9999] }))
+      },
+      interface: {
+        functions: {
+          balanceOf
+        }
       },
       on: onMock,
       balanceOf
@@ -51,7 +60,8 @@ describe('EthersResolver', () => {
     ethersProvider = {
       getNetwork: jest.fn(() => Promise.resolve({ chainId: 1234 })),
       getLogs: jest.fn(() => Promise.resolve([1, 2, 3])),
-      on: jest.fn()
+      on: jest.fn(),
+      call: jest.fn(() => Promise.resolve('encodedReturn'))
     }
 
     resolver = new EthersResolver({
@@ -145,28 +155,31 @@ describe('EthersResolver', () => {
           'TheContract', {}, 'balanceOf', { address: '0x8888' }, {}
         )
 
-        expect(balanceOf).toHaveBeenCalledWith('0x8888')
-        expect(response).toEqual('1234')
+        expect(balanceOf.encode).toHaveBeenCalledWith(['0x8888'])
+        expect(balanceOf.decode).toHaveBeenCalledWith('encodedReturn')
+        expect(response).toEqual(1234)
       })
 
-      it('should call with options', async () => {
+      it('ignores options', async () => {
         const response = await resolver.resolve(
           'TheContract', {}, 'balanceOf', { address: '0x8888' }, { call: { value: 1 } }
         )
 
-        expect(balanceOf).toHaveBeenCalledWith('0x8888', { value: 1 })
-        expect(response).toEqual('1234')
+        expect(balanceOf.encode).toHaveBeenCalledWith(['0x8888'])
+        expect(balanceOf.decode).toHaveBeenCalledWith('encodedReturn')
+        expect(response).toEqual(1234)
       })
 
       describe('with array arg return', () => {
 
         beforeEach(() => {
-          balanceOfResponse = [
+          decodeOutput = [
             'foo', 'bar'
           ]
+          balanceOf.outputs = decodeOutput
 
-          balanceOfResponse.result1 = 'foo'
-          balanceOfResponse.result2 = 'bar'
+          decodeOutput.result1 = 'foo'
+          decodeOutput.result2 = 'bar'
         })
 
         it('should shape the return values as an object when an array', async () => {

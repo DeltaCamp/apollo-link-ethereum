@@ -173,20 +173,28 @@ export class EthersResolver implements EthereumResolver {
   async _call (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Promise<any> {
     const contract = await this._getContract(contractName, contractDirectives)
     let values = Object.keys(fieldArgs || {}).map(key => fieldArgs[key]);
-    if (typeof contract[fieldName] !== 'function') {
+    const method = contract.interface.functions[fieldName]
+    if (!method) {
       return Promise.reject(`Unknown function ${fieldName}`)
     } else {
-      const options = fieldDirectives ? fieldDirectives.call : null
-      if (options) {
-        values = values.concat([options])
-      }
       try {
-        return contract[fieldName](...values).then(function (returns) {
-          var result = returns
-          if (Array.isArray(returns)) {
-            result = Object.assign({}, returns)
+        debug(fieldName)
+        const data = method.encode(values)
+
+        const tx = {
+          data,
+          to: contract.address
+        }
+
+        return this.provider.call(tx).then(function (value) {
+          let returns = method.decode(value)
+          if (method.outputs.length === 1) {
+              returns = returns[0];
           }
-          return result
+          if (Array.isArray(returns)) {
+            returns = Object.assign({}, returns)
+          }
+          return returns
         })
       } catch (error) {
         console.error(`${contractName}.${fieldName}(${JSON.stringify(fieldArgs)}): `, error.message)
