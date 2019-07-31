@@ -59,6 +59,12 @@ export class EthersResolver implements EthereumResolver {
       return this._subscribeEvents(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
     } if (fieldDirectives && fieldDirectives.hasOwnProperty('block')) {
       return this._subscribeBlock(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
+    } else {
+      const errorMessage = `${contractName}.${fieldName}(${JSON.stringify(fieldArgs)}): Unknown directives: ${JSON.stringify(fieldDirectives)}`
+      console.error(errorMessage)
+      return new Observable<FetchResult>(observer => {
+        observer.error(errorMessage)  
+      })
     }
   }
 

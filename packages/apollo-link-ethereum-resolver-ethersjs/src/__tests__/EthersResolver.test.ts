@@ -70,7 +70,7 @@ describe('EthersResolver', () => {
         expect(ethersProvider.getLogs).toHaveBeenCalledWith({
           address: '0x1234',
           fromBlock: 0,
-          toBlock: NaN,
+          toBlock: 'latest',
           topics: [null]
         })
       })
@@ -86,7 +86,7 @@ describe('EthersResolver', () => {
         expect(ethersProvider.getLogs).toHaveBeenCalledWith({
           address: '0x1234',
           fromBlock: 0,
-          toBlock: NaN,
+          toBlock: 'latest',
           topics: [null, xTopic]
         })
       })
@@ -103,7 +103,7 @@ describe('EthersResolver', () => {
         expect(ethersProvider.getLogs).toHaveBeenCalledWith({
           address: '0x1234',
           fromBlock: 0,
-          toBlock: NaN,
+          toBlock: 'latest',
           topics: [null, null, xTopic]
         })
       })
@@ -185,40 +185,54 @@ describe('EthersResolver', () => {
     })
   })
 
-  describe('@block', () => {
-    it('should subscribe to blocks', async () => {
-      const observable = await resolver.subscribe(null, {}, 'blockAlias', {}, { block: null })
+  describe('subscription', () =>{ 
 
-      observable.subscribe({
-        next: jest.fn()
+    it('should cleanly handle unknown directives', async () => {
+      const observable = await resolver.subscribe(null, {}, 'blockAlias', {}, { test: 'will be error' })
+      
+      const error = jest.fn()
+      await observable.subscribe({
+        error
       })
 
-      expect(ethersProvider.on).toHaveBeenCalledTimes(1)
+      expect(error).toHaveBeenCalledTimes(1)
     })
-  })
 
-  describe('@events', () => {
-    it('should subscribe to events', async () => {
-      const observable = await resolver.subscribe('TheContract', {}, 'allEvents', {}, { events: null })
-
-      let nextFxn = jest.fn()
-
-      observable.subscribe({
-        next: nextFxn,
-        error: (err) => {
-          console.error(err)
-        }
+    describe('@block', () => {
+      it('should subscribe to blocks', async () => {
+        const observable = await resolver.subscribe(null, {}, 'blockAlias', {}, { block: null })
+  
+        await observable.subscribe({
+          next: jest.fn()
+        })
+  
+        expect(ethersProvider.on).toHaveBeenCalledTimes(1)
       })
-
-      let event = { block: 1234 }
-
-      const onCallback = await onCallbackPromise
-
-      onCallback('arg1', 'arg2', 'arg3', event)
-
-      expect(nextFxn).toHaveBeenCalledWith({
-        args: ['arg1', 'arg2', 'arg3'],
-        event
+    })
+  
+    describe('@events', () => {
+      it('should subscribe to events', async () => {
+        const observable = await resolver.subscribe('TheContract', {}, 'allEvents', {}, { events: null })
+  
+        let nextFxn = jest.fn()
+  
+        await observable.subscribe({
+          next: nextFxn,
+          error: (err) => {
+            console.error(err)
+          }
+        })
+  
+        let event = { block: 1234 }
+  
+        const onCallback = await onCallbackPromise
+  
+        onCallback('arg1', 'arg2', 'arg3', event)
+  
+        expect(nextFxn).toHaveBeenCalledWith({
+          args: ['arg1', 'arg2', 'arg3'],
+          event
+        })
       })
     })
   })

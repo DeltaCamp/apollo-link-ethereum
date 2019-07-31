@@ -760,10 +760,10 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-apollo-link-ethereum@^0.0.36:
-  version "0.0.36"
-  resolved "https://registry.yarnpkg.com/apollo-link-ethereum/-/apollo-link-ethereum-0.0.36.tgz#f7c4c1e4afe833a9a7bc31cb2633e473070521a1"
-  integrity sha512-Gvr9ZzpuT73Tgl75YTefv51NUichik1FiacM5s8eoAo3J41Z18JNzbmUo4iofJHJfHJ4iccvEF+RZ7mjhvCWCg==
+apollo-link-ethereum@^0.0.39:
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/apollo-link-ethereum/-/apollo-link-ethereum-0.0.39.tgz#6edb09327a1579b6c174fca4f5511a2043d3c6d1"
+  integrity sha512-CgostK+qnKPHwPcB3v2M0P5hVS3E6kRS1MAVaBzJQcDmvZvrduph2rLJE7XwHihrJ/7I/LRWr5y2Uwz/H0DmyQ==
   dependencies:
     apollo-link "^1.2.6"
     apollo-utilities "^1.0.27"
