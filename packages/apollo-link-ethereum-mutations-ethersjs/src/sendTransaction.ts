@@ -101,15 +101,7 @@ export async function sendTransaction(
       estimatedGasLimit = await contract.estimate[method](...args)
     } catch (error) {
       console.error(error)
-      // const transaction = readTx()
-      // const data = { ...transaction, error: error.message }
-      // cache.writeData({ id, data })
-      // return data
     }
-
-    // // Hack to ensure it works!
-    // const newGasLimit = gasLimit.add(90000)
-
     
     const defaultGasLimit = ethers.utils.bigNumberify(1000000)
     const transactionData = contract.interface.functions[method].encode(args)

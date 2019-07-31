@@ -43,7 +43,7 @@ export class Web3JSResolver implements EthereumResolver {
   }
 
   _subscribeBlock (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
-    throw new Error("subscribe block not implemented")
+    throw new Error("subscribe @block not implemented")
   }
 
   _subscribeEvents (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {

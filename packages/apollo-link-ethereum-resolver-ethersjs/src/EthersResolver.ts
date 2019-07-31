@@ -190,7 +190,6 @@ export class EthersResolver implements EthereumResolver {
         })
       } catch (error) {
         console.error(`${contractName}.${fieldName}(${JSON.stringify(fieldArgs)}): `, error.message)
-        console.error(error)
         throw error
       }
     }

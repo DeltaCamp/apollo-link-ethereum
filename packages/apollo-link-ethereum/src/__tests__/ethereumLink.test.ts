@@ -85,16 +85,17 @@ describe('EthereumLink', () => {
           'CoordinationGame', { address: '0x1111' }, 'game', { blah: "test" }, { options: { foo: "bar" } }
         )
         expect(next).toHaveBeenCalledTimes(1)
-        expect(next).toHaveBeenCalledWith({
-          data: {
-            CoordinationGame: {
-              id: "global",
-              __typename: "CoordinationGame",
-              game: null,
+        expect(next).toHaveBeenCalledWith(
+          expect.objectContaining({
+            data: {
+              CoordinationGame: {
+                id: "global",
+                __typename: "CoordinationGame",
+                game: null
+              }
             }
-          },
-          errors: [  'resolveError'  ]
-        })
+          })
+        )
         done()
       },
     })

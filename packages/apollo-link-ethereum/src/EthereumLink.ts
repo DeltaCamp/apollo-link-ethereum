@@ -56,7 +56,7 @@ export class EthereumLink extends ApolloLink {
       let handlingNext = false;
 
       const observerErrorHandler = (error) => {
-        console.error('wtf? ', error)
+        console.error(error)
       }
 
       obs.subscribe({
