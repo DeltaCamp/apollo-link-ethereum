@@ -1,6 +1,6 @@
 {
   "name": "apollo-link-ethereum-resolver-ethersjs",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "dist/bundle.umd.js",
   "modules": "lib/index.js",
   "license": "MIT",
