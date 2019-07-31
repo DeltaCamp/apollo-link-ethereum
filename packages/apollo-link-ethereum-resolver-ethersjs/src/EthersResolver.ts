@@ -48,7 +48,6 @@ export class EthersResolver implements EthereumResolver {
       }
     } catch (error) {
       console.error(`${contractName}.${fieldName}(${JSON.stringify(fieldArgs)}): `, error.message)
-      console.error(error)
       return Promise.reject(error.toString())
     }
   }
@@ -63,7 +62,7 @@ export class EthersResolver implements EthereumResolver {
       const errorMessage = `${contractName}.${fieldName}(${JSON.stringify(fieldArgs)}): Unknown directives: ${JSON.stringify(fieldDirectives)}`
       console.error(errorMessage)
       return new Observable<FetchResult>(observer => {
-        observer.error(errorMessage)  
+        observer.error(errorMessage)
       })
     }
   }
