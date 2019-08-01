@@ -15,7 +15,8 @@ export async function sendTransaction(
   const { cache } = context
   try {
     let address
-    const { contractName, contractAddress, method, args, gasLimit, value } = variables
+    const { contractName, contractAddress, method, gasLimit, value } = variables
+    const args = variables.args || []
     
     const network = await provider.getNetwork()
     const networkId = network.chainId
