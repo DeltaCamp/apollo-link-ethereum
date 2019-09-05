@@ -15,7 +15,15 @@ export async function sendTransaction(
   const { cache } = context
   try {
     let address
-    const { contractName, contractAddress, method, gasLimit, value } = variables
+    const {
+      contractName,
+      contractAddress,
+      method,
+      gasLimit,
+      value,
+      scaleGasEstimate,
+      minimumGas
+    } = variables
     const args = variables.args || []
     
     const network = await provider.getNetwork()
@@ -103,10 +111,19 @@ export async function sendTransaction(
     } catch (error) {
       console.error(error)
     }
+
+    if (scaleGasEstimate && estimatedGasLimit) {
+      estimatedGasLimit = scaleGasEstimate * estimatedGasLimit
+    }
     
     const defaultGasLimit = ethers.utils.bigNumberify(1000000)
     const transactionData = contract.interface.functions[method].encode(args)
-    const selectedGasLimit = gasLimit || estimatedGasLimit || defaultGasLimit
+    let selectedGasLimit = gasLimit || estimatedGasLimit || defaultGasLimit
+
+    if (minimumGas && selectedGasLimit < minimumGas) {
+      selectedGasLimit = minimumGas
+    }
+
     const unsignedTransaction = {
       data: transactionData,
       to: contract.address,
@@ -122,7 +139,8 @@ ContractAddress: ${address}\n
 ContractMethod: ${method}\n
 ContractArgs: ${args}\n\n
 From: ${from}\n\n
-with gasLimit ${selectedGasLimit.toString()}:\n\n`, unsignedTransaction)
+with gasLimit ${selectedGasLimit.toString()}\n\n
+variables: `, variables, `\n\n`, unsignedTransaction)
 
     signer.sendUncheckedTransaction(unsignedTransaction)
       .then(async function (hash) {

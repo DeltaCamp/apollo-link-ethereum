@@ -6,8 +6,10 @@ export const sendTransactionMutation = gql`
     $contractAddress: String,
     $method: String!,
     $args: Object!,
-    $gasLimit: String!,
-    $value: String
+    $gasLimit: String,
+    $scaleGasEstimate: String,
+    $value: String,
+    $minimumGas: String
   ) {
     sendTransaction(
       contractName: $contractName,
@@ -15,7 +17,9 @@ export const sendTransactionMutation = gql`
       method: $method,
       args: $args,
       gasLimit: $gasLimit,
-      value: $value
+      value: $value,
+      scaleGasEstimate: $scaleGasEstimate,
+      minimumGas: $minimumGas
     ) @client
   }
 `
