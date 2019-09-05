@@ -35,12 +35,21 @@ export class EthersResolver implements EthereumResolver {
     this.ifaceCache = {}
   }
 
+  async actualProvider() {
+    if (typeof this.provider ===  'function') {
+      return await this.provider()
+    } else if (this.provider) {
+      return this.provider
+    } else {
+      throw new Error("provider is not defined")
+    }
+  }
+
   async resolve (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Promise<any> {
     debug(`resolve(${contractName}#${fieldName})`)
     try {
       fieldDirectives = fieldDirectives || {}
       fieldArgs = fieldArgs || {}
-      if (!this.provider) { return Promise.resolve() }
       if (fieldDirectives.hasOwnProperty('pastEvents')) {
         return this._getPastEvents(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
       } else {
@@ -94,9 +103,13 @@ export class EthersResolver implements EthereumResolver {
 
   _subscribeBlock (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
     return new Observable<FetchResult>(observer => {
-      this.provider.on('block', (block) => {
-        observer.next(block)
-      })
+      this.actualProvider()
+        .then(provider => {
+          provider.on('block', (block) => {
+            observer.next(block)
+          })
+        })
+        .catch(error => observer.error(error))
     })
   }
 
@@ -106,7 +119,8 @@ export class EthersResolver implements EthereumResolver {
     debug(`getPastEvents(${contractName}#${fieldName}`)
     let filter = this._getFieldNameFilter(contract, contractName, fieldName, fieldArgs, options)
     const iface = await this._getInterface(contractName)
-    return this.provider.getLogs(filter)
+    const provider = await this.actualProvider()
+    return provider.getLogs(filter)
       .then(logs => {
         return logs.map(log => ({
           log,
@@ -186,7 +200,9 @@ export class EthersResolver implements EthereumResolver {
           to: contract.address
         }
 
-        return this.provider.call(tx).then(function (value) {
+        const provider = await this.actualProvider()
+
+        return provider.call(tx).then(function (value) {
           let returns = method.decode(value)
           if (method.outputs.length === 1) {
               returns = returns[0];
@@ -204,7 +220,8 @@ export class EthersResolver implements EthereumResolver {
   }
 
   async _getContract (contractName, contractDirectives) {
-    const network = await this.provider.getNetwork()
+    const provider = await this.actualProvider()
+    const network = await provider.getNetwork()
     const { chainId } = network
 
     if (!this.contractCache[chainId]) {
@@ -224,7 +241,7 @@ export class EthersResolver implements EthereumResolver {
       if (!abi) {
         throw new Error(`Could not find abi for name ${contractName}`)
       }
-      contract = new ethers.Contract(address, abi, this.provider)
+      contract = new ethers.Contract(address, abi, provider)
       this.contractCache[chainId][address] = contract
     }
     return contract

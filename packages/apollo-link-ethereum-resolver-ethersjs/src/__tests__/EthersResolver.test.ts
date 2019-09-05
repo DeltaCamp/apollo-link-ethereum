@@ -85,6 +85,29 @@ describe('EthersResolver', () => {
         })
       })
 
+
+      describe('with a functional provider', () => {
+        beforeEach(async () => {
+          resolver = new EthersResolver({
+            abiMapping, provider: async () => ethersProvider
+          })
+        })
+
+        it('should return all events', async () => {
+          await resolver.resolve(
+            'TheContract', {}, 'allEvents', {}, { pastEvents: null }
+          )
+  
+          expect(ethersProvider.getLogs).toHaveBeenCalledTimes(1)
+          expect(ethersProvider.getLogs).toHaveBeenCalledWith({
+            address: '0x1234',
+            fromBlock: 0,
+            toBlock: 'latest',
+            topics: [null]
+          })
+        })
+      })
+
       it('should return add extra topics to allEvents', async () => {
         await resolver.resolve(
           'TheContract', {}, 'allEvents', {}, { pastEvents: { extraTopics: { types: ['uint256'], values: [14] } } }
