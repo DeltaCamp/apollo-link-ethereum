@@ -1,9 +1,9 @@
-import BN from 'bn.js'
 import { ethers } from 'ethers'
 import { Observable, FetchResult } from 'apollo-link'
 import { AbiMapping, EthereumResolver } from 'apollo-link-ethereum'
 
 const debug = require('debug')('apollo-link-ethereum-resolver-ethersjs:EthersResolver')
+const subscriptionDebug = require('debug')('apollo-link-ethereum-resolver-ethersjs:EthersResolver:subscription')
 
 class EthersResolverOptions {
   abiMapping: AbiMapping
@@ -62,7 +62,7 @@ export class EthersResolver implements EthereumResolver {
   }
 
   subscribe (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
-    debug(`subscribe(${contractName}#${fieldName})`)
+    subscriptionDebug(`subscribe(${contractName}#${fieldName})`)
     if (fieldDirectives && fieldDirectives.hasOwnProperty('events')) {
       return this._subscribeEvents(contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives)
     } if (fieldDirectives && fieldDirectives.hasOwnProperty('block')) {
@@ -78,25 +78,27 @@ export class EthersResolver implements EthereumResolver {
 
   _subscribeEvents (contractName, contractDirectives, fieldName, fieldArgs, fieldDirectives): Observable<FetchResult> {
     return new Observable<FetchResult>(observer => {
-      this._getContract(contractName, contractDirectives)
-        .then(contract => {
-          let options = fieldDirectives ? fieldDirectives.events : {}
-          const filter = this._getFieldNameFilter(contract, contractName, fieldName, fieldArgs, options)
-          contract.on(filter, function () {
-            let _arguments = Array.from(arguments)
-            let lastIndex = _arguments.length - 1
-            let event = _arguments[lastIndex]
-            let args = _arguments.slice(0, lastIndex)
-            let data = {
-              args,
-              event
-            }
-            observer.next(data)
-          })
-        })
-        .catch(error => {
-          console.error(`${contractName}.${fieldName}(${JSON.stringify(fieldArgs)}): `, error.message)
-          observer.error(error)
+      this.actualProvider()
+        .then(provider => {
+          this._getContract(contractName, contractDirectives)
+            .then(contract => {
+              let options = fieldDirectives ? fieldDirectives.events : {}
+              const filter = this._getFieldNameFilter(contract, contractName, fieldName, fieldArgs, options)
+              subscriptionDebug(`Setup filter: `, filter)
+              provider.on(filter, (log) => {
+                const iface = this._getInterface(contractName)
+                const event = {
+                  log,
+                  parsedLog: iface.parseLog(log)
+                }
+                subscriptionDebug(`filter ${contractName}.${fieldName} received `, filter, event)
+                observer.next(event)
+              })
+            })
+            .catch(error => {
+              console.error(`${contractName}.${fieldName}(${JSON.stringify(fieldArgs)}): `, error.message)
+              observer.error(error)
+            })
         })
     })
   }
@@ -118,7 +120,7 @@ export class EthersResolver implements EthereumResolver {
     let options = fieldDirectives ? fieldDirectives.pastEvents : {}
     debug(`getPastEvents(${contractName}#${fieldName}`)
     let filter = this._getFieldNameFilter(contract, contractName, fieldName, fieldArgs, options)
-    const iface = await this._getInterface(contractName)
+    const iface = this._getInterface(contractName)
     const provider = await this.actualProvider()
     return provider.getLogs(filter)
       .then(logs => {
@@ -135,6 +137,7 @@ export class EthersResolver implements EthereumResolver {
 
     let topics
     if (fieldName === 'allEvents') {
+      subscriptionDebug(`using empty topics for ${contractName}.${fieldName}`)
       topics = [null]
     } else {
       let values = Object.keys(fieldArgs || {}).map(key => fieldArgs[key]);
@@ -142,6 +145,7 @@ export class EthersResolver implements EthereumResolver {
       if (!fxnFilter) { throw new Error(`${contractName} does not have an event called ${fieldName}`)}
       debug('getFieldNameFilter fxnFilter values: ', values, ' for args: ', fieldArgs)
       topics = fxnFilter(...values).topics
+      subscriptionDebug(`using topics for ${contractName}.${fieldName}`, topics)
     }
     debug('getFieldNameFilter topics: ', topics)
 
@@ -247,7 +251,7 @@ export class EthersResolver implements EthereumResolver {
     return contract
   }
 
-  async _getInterface (contractName) {
+  _getInterface (contractName) {
     let iface = this.ifaceCache[contractName]
     if (!iface) {
       const abi: any = this.abiMapping.getAbi(contractName)
