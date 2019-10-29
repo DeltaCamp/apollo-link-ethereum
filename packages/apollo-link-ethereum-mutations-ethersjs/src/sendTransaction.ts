@@ -5,6 +5,14 @@ let nextTxId = 1
 
 const debug = require('debug')('apollo-link-ethereum-mutations-ethersjs:sendTransaction')
 
+interface IUnsignedTransaction {
+  data: string,
+  to: string,
+  gasLimit: string,
+  value: string,
+  [key: string]: any
+}
+
 export async function sendTransaction(
   options, // ethers provider and apollo-link-ethereum abiMapping
   parentFieldResult, // parent field result
@@ -125,15 +133,16 @@ export async function sendTransaction(
       selectedGasLimit = minimumGas
     }
 
-    const providerGasPrice = await provider.getGasPrice()
-    const selectedGasPrice = gasPrice || providerGasPrice
-
-    const unsignedTransaction = {
+    let unsignedTransaction: IUnsignedTransaction;
+    unsignedTransaction = {
       data: transactionData,
       to: contract.address,
       gasLimit: selectedGasLimit,
-      gasPrice: selectedGasPrice,
       value: actualValue
+    }
+
+    if (gasPrice) {
+      unsignedTransaction.gasPrice = gasPrice
     }
 
     const from = await signer.getAddress()
@@ -144,7 +153,7 @@ ContractAddress: ${address}\n
 ContractMethod: ${method}\n
 ContractArgs: ${args}\n\n
 From: ${from}\n\n
-with gasPrice ${selectedGasPrice.toString()}\n\n
+with gasPrice ${gasPrice && gasPrice.toString()}\n\n
 with gasLimit ${selectedGasLimit.toString()}\n\n
 variables: `, variables, `\n\n`, unsignedTransaction)
 
