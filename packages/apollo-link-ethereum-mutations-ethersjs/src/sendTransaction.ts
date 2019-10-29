@@ -19,6 +19,7 @@ export async function sendTransaction(
       contractName,
       contractAddress,
       method,
+      gasPrice,
       gasLimit,
       value,
       scaleGasEstimate,
@@ -124,10 +125,14 @@ export async function sendTransaction(
       selectedGasLimit = minimumGas
     }
 
+    const providerGasPrice = await provider.getGasPrice()
+    const selectedGasPrice = gasPrice || providerGasPrice
+
     const unsignedTransaction = {
       data: transactionData,
       to: contract.address,
       gasLimit: selectedGasLimit,
+      gasPrice: selectedGasPrice,
       value: actualValue
     }
 
@@ -139,6 +144,7 @@ ContractAddress: ${address}\n
 ContractMethod: ${method}\n
 ContractArgs: ${args}\n\n
 From: ${from}\n\n
+with gasPrice ${selectedGasPrice.toString()}\n\n
 with gasLimit ${selectedGasLimit.toString()}\n\n
 variables: `, variables, `\n\n`, unsignedTransaction)
 
