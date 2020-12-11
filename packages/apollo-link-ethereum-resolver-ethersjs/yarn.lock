@@ -760,10 +760,10 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-apollo-link-ethereum@^0.0.39:
-  version "0.0.39"
-  resolved "https://registry.yarnpkg.com/apollo-link-ethereum/-/apollo-link-ethereum-0.0.39.tgz#6edb09327a1579b6c174fca4f5511a2043d3c6d1"
-  integrity sha512-CgostK+qnKPHwPcB3v2M0P5hVS3E6kRS1MAVaBzJQcDmvZvrduph2rLJE7XwHihrJ/7I/LRWr5y2Uwz/H0DmyQ==
+apollo-link-ethereum@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/apollo-link-ethereum/-/apollo-link-ethereum-0.1.3.tgz#7fed11be661019a174e60160c80628203c217231"
+  integrity sha512-qld7lk6i9h/yOdYNcE2+TvnGtP5TEXvisiBIsDIu7CR1ss2JcwAS79Zb41SXkDWdEyKHrrTfAvGqo/xtBZDZ+w==
   dependencies:
     apollo-link "^1.2.6"
     apollo-utilities "^1.0.27"
@@ -2862,9 +2862,9 @@ inherits@2, inherits@^2.0.1, inherits@^2.0.3, inherits@~2.0.0, inherits@~2.0.3:
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
 
 ini@^1.3.2, ini@^1.3.4, ini@^1.3.5, ini@~1.3.0:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
-  integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.7.tgz#a09363e1911972ea16d7a8851005d84cf09a9a84"
+  integrity sha512-iKpRpXP+CrP2jyrxvg1kMUpXDyRUFDWurxbnVT1vQPx+Wz9uCYsMIqYuSBLV+PAaZG/d7kRLKRFc9oDMsH+mFQ==
 
 init-package-json@^1.10.3:
   version "1.10.3"
