@@ -760,10 +760,10 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-apollo-link-ethereum@^0.0.39:
-  version "0.0.39"
-  resolved "https://registry.yarnpkg.com/apollo-link-ethereum/-/apollo-link-ethereum-0.0.39.tgz#6edb09327a1579b6c174fca4f5511a2043d3c6d1"
-  integrity sha512-CgostK+qnKPHwPcB3v2M0P5hVS3E6kRS1MAVaBzJQcDmvZvrduph2rLJE7XwHihrJ/7I/LRWr5y2Uwz/H0DmyQ==
+apollo-link-ethereum@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/apollo-link-ethereum/-/apollo-link-ethereum-0.1.3.tgz#7fed11be661019a174e60160c80628203c217231"
+  integrity sha512-qld7lk6i9h/yOdYNcE2+TvnGtP5TEXvisiBIsDIu7CR1ss2JcwAS79Zb41SXkDWdEyKHrrTfAvGqo/xtBZDZ+w==
   dependencies:
     apollo-link "^1.2.6"
     apollo-utilities "^1.0.27"
@@ -6360,9 +6360,9 @@ xtend@~4.0.1:
   integrity sha1-pcbVMr5lbiPbgg77lDofBJmNY68=
 
 y18n@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.1.tgz#6d15fba884c08679c0d77e88e7759e811e07fa41"
-  integrity sha1-bRX7qITAhnnA136I53WegR4H+kE=
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.2.tgz#85c901bd6470ce71fc4bb723ad209b70f7f28696"
+  integrity sha512-uGZHXkHnhF0XeeAPgnKfPv1bgKAYyVvmNL1xlKsPYZPaIHxGti2hHqvOCQv71XMsLxu1QjergkqogUnms5D3YQ==
 
 "y18n@^3.2.1 || ^4.0.0", y18n@^4.0.0:
   version "4.0.0"
