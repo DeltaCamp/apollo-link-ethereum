@@ -760,10 +760,10 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-apollo-link-ethereum@^0.0.39:
-  version "0.0.39"
-  resolved "https://registry.yarnpkg.com/apollo-link-ethereum/-/apollo-link-ethereum-0.0.39.tgz#6edb09327a1579b6c174fca4f5511a2043d3c6d1"
-  integrity sha512-CgostK+qnKPHwPcB3v2M0P5hVS3E6kRS1MAVaBzJQcDmvZvrduph2rLJE7XwHihrJ/7I/LRWr5y2Uwz/H0DmyQ==
+apollo-link-ethereum@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/apollo-link-ethereum/-/apollo-link-ethereum-0.1.3.tgz#7fed11be661019a174e60160c80628203c217231"
+  integrity sha512-qld7lk6i9h/yOdYNcE2+TvnGtP5TEXvisiBIsDIu7CR1ss2JcwAS79Zb41SXkDWdEyKHrrTfAvGqo/xtBZDZ+w==
   dependencies:
     apollo-link "^1.2.6"
     apollo-utilities "^1.0.27"
@@ -5064,9 +5064,9 @@ q@^1.5.1:
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
 qs@~6.5.2:
-  version "6.5.2"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
-  integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
+  version "6.5.3"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.3.tgz#3aeeffc91967ef6e35c0e488ef46fb296ab76aad"
+  integrity sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==
 
 quick-lru@^1.0.0:
   version "1.1.0"
